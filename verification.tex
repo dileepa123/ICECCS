@@ -1,0 +1,236 @@
+\section{Verification}\label{sec:verification}
+
+In this section, we present our algorithm to verify whether a probabilistic BAR system modelled in the previous specification framework is a Nash-equilibrium. The input of the algorithm is
+$m$ Byzantine players (possibly empty), denoted as $\mathcal{M}^b=\{\mathcal{M}^b_1, \mathcal{M}^b_2, \dots, \mathcal{M}^b_m\}$, 
+$n-m$ non-Byzantine players (non-empty), either altruistic, denoted as $\mathcal{M}^a=\{\mathcal{M}^a_{m+1}, \mathcal{M}^a_{m+2}, \dots, \mathcal{M}^a_n\}$, or rational, denoted as $\mathcal{M}^r=\{\mathcal{M}^r_{m+1}, \mathcal{M}^r_{m+2}, \dots, \mathcal{M}^r_n\}$. We assign to each altruistic player  $\mathcal{M}^a_{m+j}\in \mathcal{M}^a$ a corresponding rational player $\mathcal{M}^r_{m+j}\in \mathcal{M}^r$. 
+
+
+We verify whether for any altruistic player, if she deviates from the specified behaviour, i.e., the altruistic player becomes a rational player,
+her pay-off would not increase. This property captures that the specified altruistic behaviour is a Nash-equilibrium, which is formally defined as follows.\\
+{\bf{Nash-equilibrium}}\label{p:ne}
+A specification $\langle \mathcal{M}^b$, $\mathcal{M}^a, \mathcal{M}^r\rangle$ with perfect information
+is a Nash-equilibrium if, 
+\begin{equation}
+\label{eq:NEglobal}
+	\forall \mi{init} \in I, 
+	\forall i > m, 
+	U_i(\mi{init}) \geq V_i(\mi{init}).
+\end{equation}
+A specification $\langle \mathcal{M}^b$, $\mathcal{M}^a, \mathcal{M}^r\rangle$ with imperfect information
+is a Nash-equilibrium if, 
+\begin{equation}
+\label{eq:NElocal}
+\forall i > m, 
+\forall \mi{init} \in I_i, 
+Ul_i(\mi{init}) \geq Vl_i(\mi{init}).
+\end{equation}
+$\mathcal{M}^b$, $\mathcal{M}^a, \mathcal{M}^r$ are defined the same as the input of the algorithm. $I$ is the set of global initial states, i.e., all the combinations of the initial states of the total $n$ players. $m$ is the number of Byzantine players,
+$i$ is the index of a player, since the Byzantine players are indexed from $1$ to $m$, $i>m$ means that the player $i$ is not a Byzantine player.  
+%The value function is defined as the value at global state $s$  for player  $i > m$ .
+In a perfect information game, $U_i: S \times \mathbb{N} \rightarrow \mathbb{R}$ denotes the minimum guaranteed pay-off for player $i$ starting from global state $s\in S$ and doing exactly $k\in \mathbb{N}$ actions, when $i$ is \emph{altruistic}.
+$V_i: S \times \mathbb{N} \rightarrow \mathbb{R}$ denotes the maximum guaranteed expected pay-off achieved by player $i$, starting from global state $s\in S$ and doing exactly $k\in \mathbb{N}$ actions, when $i$ is \emph{rational}. When $k$ tends to $\infty$, we simply denote the converged value as $V_i(s)$ and $U_i(s)$ respectively. Hence, $U_i(init) \geq V_i(init)$ ensures that a rational player does not deviate because the player would not gain pay-off by deviating.
+For imperfect information games, the minimum guaranteed expected pay-off of an altruistic player and maximum guaranteed pay-off of a rational player are defined locally and are denoted as $Ul_i: S_i \times \mathbb{N} \rightarrow \mathbb{R}$ and $Vl_i: S_i \times \mathbb{N} \rightarrow \mathbb{R}$, respectively. 
+
+
+%For the above mentioned specification of a probabilistic BAR system, we verify the Nash-equilibrium property. We would define some new notations and definitions needed for verification. A game can be defined as a set of players with a local specification for each player. The number of players is $n$. The player set is $[n]$. For notational convenience, we assume that $Z=[m] , m < n$ is the Byzantine player set. The set of altruistic players is $Al=[n]-[m]$.
+%$Z \subseteq [n]$ denotes the Byzantine player set.
+%A full specification comes with the set of Byzantine players as follows.It will be referred as a mechanism here after.Player $i$'s FSM can be represented as follows. Based on his Byzantine, altruistic or rational behaviour he would have a different FSM.\\
+% $\mathcal{M}^b_i=(S^b_i, I^b_i, A^b_i, G^b_i, T^b_i, P^b_i, H^b_i)$\\
+% $\mathcal{M}^a_i=(S^a_i, I^a_i, A^a_i, G^a_i, T^a_i, P^a_i, H^a_i)$\\
+% $\mathcal{M}^r_i=(S^r_i, I^r_i, A^r_i, G^r_i, T^r_i, P^r_i, H^r_i)$\\
+% Note that $G^b_i,P^b_i,G^r_i,P^r_i$ are null sets.
+
+%All the specifications of the Byzantine players can be combined.\\
+%  .Similarly, combined altruistic specification can be written as,\\
+%   ,
+%   $\mathcal{M}^r=\mathcal{M}^r_{m+1} \times \mathcal{M}^r_{m+2} \times \dots \mathcal{M}^r_n$
+
+
+
+%\paragraph{Valid Path Set}
+%Under the presence of Altruistic players, after any point of execution of a game we have a tree of paths in which the root is an initial state. If we are given a path set $pset$, we can determine whether it is valid and denotes the path tree at some point of execution. Denote path suffix of a path $X$ after $i$'th state as $^{suf}X(2i-1)$. Path set suffix $^{suf}pset(2i-1)$ can be defined as all the non empty sequences result from taking the suffix at $2i-1$. Let\\
+% $\forall X_1,X_2 \in pset, X_1(0)=X_2(0) \wedge X_1^b(1)=X_2^b(1) \wedge X(0) \in I$ for some $X \in pset \wedge \cup X_1^a(1)= \cup X_2^a(1) = \{ ac | ac \in A_{Al} P(X_1^a(0),ac)>0\}$.\\
+% The above property can be extended to match any  path set suffix.\\
+%  $\forall i$, $^{suf}pset(2i-1) \ne \phi$ $\implies$ \\
+% $\forall X_1,X_2 \in ^{suf}pset(2i-1), X_1(0)=X_2(0) \implies X_1^b(1)=X_2^b(1) \wedge \forall s \in S$, $ \{ac1 | ac1 \in A_{Al} P(s^a,ac1)>0 \wedge s=X(0)$ for some $X\} = \{ ac | ac \in A_{Al} \wedge P(Y^a(0),ac)>0 \wedge Y \in ^{suf}pset(2i-1) \wedge Y^a(0)=s \wedge Y^a(1)=ac\}$
+% 
+% A path which only includes first $2i-1$ terms of path $X$, can be called $^{pre}X(2i-1)$. path set prefix ($^{pre}pset$) would be analogous to path set suffix. 
+% \paragraph{Extension of a valid path set}
+% A valid path set $pset2$ is said to extend $pset_1$, if $pset_1 = ^{pre}pset_2(2i-1)$for some $i$.
+% 
+% \paragraph{Probability of a Valid Path Set}
+% For a valid path set $pset$, $P(pset)= \Sigma _ {X \in pset} P(X).$
+
+%\paragraph{Terminal Global States} 
+
+
+%%In the case that a game terminates with probability $1$, there needs to exist termination states which can be derived from the given set of players as follows.
+%%$TS=\{s \in S \vert ! \exists s' s.t.\ T(s,a)=s', \forall a \in A  \}$ where $S$ is the global states and $A$ is the global actions. 
+
+%%Termniating with probability $1$ is captured by that the probability of reaching states in $TS$ from initial state converges to $1$.
+%%To formally define the condition of terminating with probability $1$, we first introduce the notion of \emph{path}. 
+%%A path is a finite alternating sequence of global states and actions. 
+%%We denote a path $\pi$ of length $l$ as $\pi=s_0a_0s_1a_1 \dots s_la_ls_{l} , l \in \mathbb{N}$ with 
+%%$T(s_p,a_p)=s_{p+1}$ for $p \le l-1$. We denote the set of all possible paths in a global graph as $PTS$.
+%%The probability of a path is the product of probabilities for each global transition in the path. For example, the path probability of $\pi$ is 
+%%$P(\pi) = \Pi_{k=1}^l P(s_k,a_k) $.
+%%If $\forall s \notin TS  \exists $path\ $\pi \in PTS$ s.t.\ $s_{|\pi|)}=s$ where $s_{|\pi|)}$ is the last state in the path with $|\pi|$ being the length of the path, then we say that the terminal state set is reachable from any non-terminal state. 
+
+%These terminal set is analogous to the absorbing set of a markov chain. The only difference is, states in the terminal set does not define a transition to itself with probability $1$, but stays at the state without performing any transition. \\
+ %A given path $\pi$ can have its own Byzantine and altruistic components. $X^b$ only includes $s_[Z]$ and $a_[Z]$ for each $s \in S$ and $a \in A$ appearing in $X$. Definition of $X^a$ is analogous. 
+%Set of all paths is denoted by $PTS$.
+%\paragraph{Probability of Termination} 
+%Probability of termination is simply, the long-term probability of reaching a terminal global state in $TS$ from an initial state in $I$. This can be determined  by considering all the path probabilities from the paths start from an initial state and ends from a terminal state for each non-deterministic strategy by the Byzantine players. When the non-altruistic players have non deterministic choices, we have different game trees which correspond to different terminating probabilities. \\
+%If this is the case, for game terminates with probability $1$ for any game tree choice by non-altruistic players.
+
+%\paragraph{Termination Probability of a Valid Path Set}
+%For a valid path set $pset$, $P_{term}(pset)= \Sigma _ {X \in pset \wedge X(|X| \in TS)} P(X).$ We can see that  $pset_2$ extends $pset_1 \implies$  $P_{term}(pset2) \geq P_{term}(pset1)$
+
+%\paragraph{Perfect Information Games} In this paper, we define perfect information games as, after performing any global action, all the players know the global state they are in. In contrast, in an imperfect information game, all the players would know the possible set of global states that they have arrived at, after each global action with the corresponding probabilities of reaching.
+
+%Our algorithm checks Nash-equilibrium only if a mechanism terminates. The algorithm can be written as follows.
+
+%$\Sigma_{x \in \{X | X \in PTS \wedge X(0) \in I \wedge X(|X|-1) \in TS \}} P(X),$
+%
+%
+%\\
+
+%We focus on the games that terminate with probability $1$ in the long-run, since otherwise, the pay-off of a rational player and the pay-off of the player deviating can be infinite and thus cannot be compared. In the case that a probability of termination of a game reaches $1$, the pay-off of a player converges to a certain value in the long-run.
+
+$U_i(\mi{init})$ and $V_i(\mi{init})$ or $Ul_i(\mi{init})$ and $Vl_i(\mi{init})$ may not always be comparable. In order to be able to compare the two values, we restrict to games satisfying \begin{inparaenum}
+	\item finite states
+	\item pre-defined pay-offs
+	\item all strategies terminate with probability reaching $1$
+\end{inparaenum}.
+
+Given a specification of a BAR system, i.e., a set of players, $\langle \mathcal{M}^b$, $\mathcal{M}^a, \mathcal{M}^r \rangle$, the maximum non-terminating probability bound $\epsilon$ with $0 < \epsilon < 1$, and a boolean value $\mi{perfect}$ indicating whether it is a perfect information game. The algorithm~\ref{verifynash} first calculates the iteration steps $\mi{iter}$ by ensuring that the non-terminating probability is smaller than $\epsilon$. Then we call the algorithm~\ref{checknash} by providing $\langle \mathcal{M}^b$, $\mathcal{M}^a, \mathcal{M}^r \rangle$ and $\mi{iter}$ as parameters. The algorithm~\ref{checknash} decides whether $\langle \mathcal{M}^b$, $\mathcal{M}^a \rangle$ is a Nash-equilibrium. There are three possible outcomes of algorithm~\ref{checknash}: $\mi{PASS}$ meaning that the specification is a Nash-equilibrium, $\mi{FAIL}$ meaning that the specification is NOT a Nash-equilibrium, and $\mi{TRY}\ \mi{SMALLER}\ \epsilon$ meaning that the error is too large. In order to reduce the error, $\epsilon$ needs to be set to a smaller value, so that more iteration steps are involved and thus the algorithm would terminate with a definite answer with a higher probability. (Details of algorithm~\ref{checknash} will be explained in the next paragraph). If the result is $\mi{TRY}\ \mi{SMALLER}\ \epsilon$, we call the algorithm~\ref{verifynash} with a smaller non-terminating bound $\frac{\epsilon}{2}$. To ensure that the loop terminates, we set a large iteration bound $iter_{max}$. When the iteration bound is reached without any definite answers, the algorithm~\ref{verifynash} returns $\mi{NOT}\ \mi{DECIDED}$ meaning that the algorithm cannot terminate with a definite result.
+
+%We first calculate long-term probabilities of reaching a terminal state, starting from an initial state, for any valid combined strategy of all the Byzantine players. If the long-term probability converge to $1$, that implies the game terminates for any action choice of the players. This is the set of games that we consider for Nash-equilibrium verification for which, we call the algorithm \ref{checknash}.The input $0 < \epsilon < 1$ is used to determine the number of iterations, the value function should be updated . We calculate the number of iterations that can guarantee that game has terminated with the probability of  at least $1-\epsilon$. \\
+ 
+\begin{algorithm}[H]
+	\caption{$\mi{VerifyNash}$($\langle \mathcal{M}^b$, $\mathcal{M}^a, \mathcal{M}^r \rangle$, $\epsilon$, $\mi{iter}_{max}$, $\mi{perfect}$)}
+	\label{verifynash}
+	\begin{algorithmic}[1]
+		\STATE Let $p_{min}= min_{s \in S, a \in A} \{P(s,a)\} $
+		\STATE $iter = \ceil{\frac{log(\epsilon)}{log(1-p_{min})}}$
+		\IF{$iter > iter_{max}$}
+		\RETURN $\mi{NOT}\ \mi{DECIDED}$
+		\ENDIF
+		%\IF{$TS \neq \phi \wedge \forall s \notin TS$ ,$  \exists X \in PTS$ s.t $X(|X|) \in TS \wedge X(0)=s$}
+		\STATE $\mi{Result}$ $\leftarrow$ $ CheckNash(\langle \mathcal{M}^b$,$\mathcal{M}^a,\mathcal{M}^r \rangle$,$iter$,$perfect$)
+		\IF{ $\mi{Result}$= $\mi{TRY}\ \mi{SMALLER}\ \epsilon$}
+		\STATE $ VerifyNash(\langle \mathcal{M}^b$,$\mathcal{M}^a,\mathcal{M}^r \rangle$,$\frac{\epsilon}{2}$,$perfect$)
+		\ELSE
+		\RETURN $\mi{Result}$
+		\ENDIF
+		%\ELSE
+		%\RETURN $\text{NON TERMINATING GAME}$
+		%\ENDIF
+	\end{algorithmic}
+\end{algorithm}
+
+The key part of algorithm~\ref{checknash} is to calculate the $V_i(init, iter)$, $U_i(init, iter)$ for perfect information game and calculate 
+$Vl_i(init, iter)$ and $Ul_i(init, iter)$ for imperfect information game. Firstly, we initialize the four values to be $0$ (line 9 and line 10).
+Then we iteratively calculate the four values. In each iteration, we update the expected pay-offs of the current iteration (step $t$) to the corresponding values accumulated in the previous $t-1$ steps (line 11 to line 16). 
+In detail, to calculate $V_i$, we first compute a set of possible expected pay-offs at a global state for each action combination of Byzantine players and rational player $i$. This set is then grouped by the possible next local states of rational player $i$ ($s_i \in S_i$). For each possible $s_i$, the Byzantine players together choose a combined action for the next state which minimises the expected pay-off of $i$. This gives the guaranteed pay-off at a given global state for each next local state $s_i$ of player $i$. Then player $i$ can choose the $s_i$ which gives the maximum guaranteed pay-off at global state $s$. The difference in calculating $U_i$ is that we calculate the expected pay-off over all the possible next local states for the player $i$ at a global state, instead of taking the maximum, because an altruistic player does not make choice but just follows the specification. Compare to $V_i(init, iter)$ and $V_i(init, iter)$, we calculate $Vl_i(init, iter)$ and $Ul_i(init, iter)$ using a different reward function in the algorithm, which is the transition based reward structure ($AH_i$). Given the local state $ls$, $Vl_i(ls, iter)$ and $Ul_i(ls, iter)$ represent the expected pay-off for rational and altruistic, over all possible global states which contain $ls$. %The probabilities of the global states are the normalized probabilities of reaching a particular global state after the first iteration.
+
+%
+\begin{algorithm}[H]
+	\caption{$\mi{CheckNash}$($\langle \mathcal{M}^b$,$\mathcal{M}^a,\mathcal{M}^r \rangle$, $\mi{iter}$, $\mi{perfect}$)}
+	\label{checknash}
+	\begin{algorithmic}[1]
+		\FORALL{$i \in Al$} 
+		\LCOMMENT $Al$ is the set of indexes of non-Byzantine players
+		\STATE Let $s \in S$
+		\STATE Let $ls \in S_i$
+		\STATE Let $ha_{\mi{max}}= \mi{max}\{|AH^r_i(s,a)| | s \in S \wedge a \in A\}$
+		\STATE Let $hs_{\mi{max}}= \mi{max}\{|SH^r_i(s)| | s \in S\}$
+	    \STATE Let $p_{\mi{min}}= \mi{min}_{s \in S, a \in A} \{P(s,a)\} $
+	    \STATE $\mi{max}_{\mi{Aerror}} =2ha_{\mi{max}}(1-p_{\mi{min}})^{\mi{iter}}$
+	    \STATE $\mi{max}_{\mi{Serror}} =2hs_{\mi{max}}(1-p_{\mi{min}})^{\mi{iter}}$
+		\STATE $V_{i}(s,0) \leftarrow 0 ;  U_{i}(s,0) \leftarrow 0 ;$
+		\STATE $Vl_{i}(ls,0) \leftarrow 0 ;  Ul_{i}(ls,0) \leftarrow 0 ;$
+		\FOR{$t$=1 to $\mi{iter}$}
+		
+		
+		\STATE	$V_{i}(s,t) \leftarrow
+		%				I(i \in Z) i is rational
+		\mi{max} _{s'_i \in S_i} \{$
+		$\mi{min}_{s'_{Z} \in S_{Z}}$ 
+		$E_{s'_{Al \setminus \{i\}} \in S_{Al \setminus \{i\}}}$ \\
+		$\{SH^r_i(s') +$ $  {V_i}(s',t-1) | T(s,a)=s' for$ $\mi{some}$  $a \in A \} \}
+		$\COMMENT{Z is the set of indexes of Byzantine players}
+		\\ 
+		
+		
+		\STATE	$U_{i}(s,t) \leftarrow
+		%				I(i \in Z) i is \mi{rational}
+		E _{s'_i \in S_i}$
+		$\{ \mi{min}_{s'_{Z} \in S_{Z}}$ 
+		$E_{s'{Al \setminus \{i\}} \in S_{Al \setminus \{i\}}}$ \\
+		$\{SH^a_i(s') +$ $  {U_i}(s',t-1) | T(s,a)=s' for$ $\mi{some}$  $a \in A  \}\}
+		$\\	
+	
+		\STATE	$Vl_{i}(ls,t) \leftarrow
+		%				I(i \in Z) i is \mi{rational}
+		\mi{max} _{a_i \in A_i} \{$
+			$\{E_{\{s \in S | s_i=ls\}} $ 
+			$\mi{min}_{a_{Z} \in A_{Z}} \{$ \\
+			$E_{a_{Al \setminus \{i\}} \in A_{Al \setminus \{i\}}}\{AH^r_i(s,a) +$ $  {V_i}(s',t-1) | T(s,a)=s' \wedge s_i=ls \} \} \}
+			$\\
+		
+		
+		\STATE	$Ul_{i}(ls,t) \leftarrow
+		%				I(i \in Z) i is rational
+		E _{a_i \in A_i}$
+		$\{E_{\{s \in S | s_i=ls\}} $ 
+		$\mi{min}_{a_{Z} \in A_{Z}} \{$ \\
+		$E_{a_{Al \setminus \{i\}} \in A_{Al \setminus \{i\}}}\{AH^a_i(s,a) +$ $  {U_i}(s',t-1) | T(s,a)=s' \wedge s_i=ls \} \} \}
+		$\\		
+		\ENDFOR
+		
+		
+		\ENDFOR
+		\IF{!perfect}
+		\IF{$\forall i \in Al$, $\forall init \in I_i$. $Vl_i(\mi{init},\mi{iter}) \le Ul_i(\mi{init},\mi{iter}) \wedge Ul_i(\mi{init},\mi{iter}) - Vl_i(\mi{init},\mi{iter}) \ge \mi{max}_{\mi{Aerror}}$ }
+		\RETURN $\mi{PASS}$
+		\ELSIF{$\forall i \in Al$,$\forall init \in I_i$.$Vl_i(\mi{init},\mi{iter}) > Ul_i(\mi{init},\mi{iter}) \wedge Vl_i(\mi{init},\mi{iter}) - Ul_i(\mi{init},\mi{iter}) > \mi{max}_{\mi{Aerror}}$}
+		\RETURN $\mi{FAIL}$
+		\ENDIF
+		\ENDIF
+		\IF{perfect}
+		\IF{$\forall i \in Al$, $\forall \mi{init} \in I$. $V_i(\mi{init},\mi{iter}) \le U_i(\mi{init},\mi{iter})
+			\wedge U_i(\mi{init},\mi{iter}) - V_i(\mi{init},\mi{iter}) \ge \mi{max}_{\mi{Serror}}$}
+		\RETURN $\mi{PASS}$
+		\ELSIF{$\forall i \in Al$, $\forall \mi{init} \in I$. $V_i(\mi{init},\mi{iter}) > U_i(\mi{init},\mi{iter})
+			\wedge V_i(\mi{init},\mi{iter}) - U_i(\mi{init},\mi{iter}) > \mi{max}_{\mi{Serror}}$}
+		\RETURN $\mi{FAIL}$
+		\ENDIF
+		\ENDIF
+		\RETURN $\mi{TRY}\ \mi{SMALLER}\ \epsilon$
+	\end{algorithmic}
+\end{algorithm}
+Once the four values are calculated, we can use them to perform the verification. 
+If the game is an imperfect information game, Nash-equilibrium definition~\ref{eq:NElocal} is applied. If it is a perfect information game, Nash-equilibrium definition~\ref{eq:NEglobal} is applied. 
+Since we limit the iteration steps, the above calculated value is an approximation of the pay-offs in infinite steps. That implies that an error exists. We calculate the maximum error bound in line 4 to line 8. Intuitively, we obtain the maximum absolute error of pay-off of the player $i$, i.e., $ha_{max}$ and $hs_{max}$, and then calculate the upper bound of the pay-off error in any infinite path starting from step $\mi{iter}$ (we denote the upper bound as $e$), by summing up the pay-offs weighted by the probability of the corresponding actions in the path. The maximum error bound is computed by doubling the upper
+bound of pay-off error $e$ due to the use of absolute value. The reason is that $U_i(\mi{init})$ is in the range of $[U_i(\mi{init}, \mi{iter})-e, U_i(\mi{init}, \mi{iter})+e]$; $V_i(\mi{init})$ is in the range of $V_i(\mi{init}, \mi{iter})-e, V_i(\mi{init}, \mi{iter})+e]$; by ensuring $U_i(\mi{init}, \mi{iter})-e \ge V_i(\mi{init}, \mi{iter})+e$, we ensure that $U_i(\mi{init})\ge V_i(\mi{init})$.
+Given the calculated error bound, we compare $|V_i(\mi{init}, \mi{iter})-U_i(\mi{init}, \mi{iter})|$ with the error bound (or compare $|Vl_i(\mi{init}, \mi{iter})-Ul_i(\mi{init}, \mi{iter})|$ with the error bound). If $|V_i(\mi{init}, \mi{iter})-U_i(\mi{init}, \mi{iter})|$ (or $|Vl_i(\mi{init})-Ul_i(\mi{init})|$) is no less than the error bound, meaning that the error is NOT too large, the algorithm terminates; otherwise the algorithm returns $\mi{TRY}\ \mi{SMALLER}\ \epsilon$. When the algorithm terminates, if $V_i(\mi{init})\ge U_i(\mi{init})$, the algorithm returns $\mi{PASS}$, meaning that the specification is a Nash-equilibrium, otherwise, the algorithm returns $\mi{FAIL}$ meaning that the specification is not a Nash-equilibrium.
+%In order to verify that one of the value functions is always above the other in the long run we should consider the maximum error for the absolute difference  analogously). If a Nash-equilibrium  is not guaranteed with the given $\epsilon$, $\epsilon$ is replaced with $\frac{\epsilon}{2}$ which implies that we calculate for more iterations. If the number of iterations exceed a predefined maximum value the algorithm returns $\text{NOT DECIDED}$.
+
+
+
+%Since the Nash-equilibrium condition involves checking the optimality of the behaviours of all the altruistic players, we have to loop through $Al$. All the local and global value functions are initialized to $0$. It is sufficient that all the initial value functions being initialized to the same value, since it does not affect the comparison. Maximum error functions for the value functions at the given number of iterations are also calculated. This is to prove that, even after a change in value functions by the maximum error possible, the sign of the difference between value functions does not change. \\
+%Iterative calculation of the value functions is performed next. We calculate four value functions namely $V_i$,$U_i$,$Vl_i$,$Ul_i$. A dynamic programming approach is used (i.e. value function in the current iteration is calculated by considering the optimal value functions calculated in previous iterations).\\
+
+  
+
+
+Theoretically, if the iteration number is not bounded with $\mi{iter}_{max}$, the algorithm should terminate with $PASS$ or $FAIL$, for any scenario where $V_i(\mi{init})-U_i(\mi{init})$ converges to a non-zero value. If $V_i(\mi{init})-U_i(\mi{init})$ converges to zero, then the algorithm is not guaranteed to terminate because, it terminates only if $|V_i(\mi{init},\mi{iter})-U_i(\mi{init},\mi{iter})|=\mi{max}_{\mi{Serror}}$ ($|Vl_i(\mi{init},\mi{iter})-Ul_i(\mi{init},\mi{iter})|=\mi{max}_{\mi{Aerror}}$ correspondingly) for some $\mi{iter}$ value. 
+%We will be looking at this scenario, in our future work. 
+  
+
+
+%It should be noted that probability of a local state $s'$ given it's previous state $s$ is,\\
+%$P(s'_i)=P(s_i,a_i)$ where $T(s_i,a_i)=s'_i$. This distribution is used to calculate the expected values over $s'$ in the above algorithm.
+
+

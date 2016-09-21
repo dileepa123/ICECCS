@@ -1,0 +1,250 @@
+\section{Specification}\label{sec:spec}
+
+In BAR systems, the non-altruistic agents do not necessarily follow the protocol rules. It is thus necessary to capture their possible deviations through adequate specifications. Moreover, we consider probabilistic BAR systems. In this setting, the agents may have to choose a local action among several enabled actions. Their choices are governed by a probability distribution. In this section, we present a framework which allows us to formally specify a probabilistic BAR system as a game in an intuitive way. We highlight that our framework facilitates modelling of concurrent games with some imperfect information. In our case, we restrict the imperfect information for a player to the knowledge of her opponents' local states. It means that each agent knows her own local state, the entire reward structure of the game, as well as, given a global state, the outgoing probability distribution.
+
+We first show the formal modelling of each type of players as Finite State Machines (FSM) and then depict the combination of the FSMs to form a global transition system modelling the global behaviour of the whole system.
+
+\subsection{Altruistic players}\label{ssec:al}
+Altruistic player's behaviours that are specified in a protocol, can be formally captured by a FSM defined as a tuple $\mathcal{M}^a_i=(\sia, \iia, \aia, \gia, \tia, \pia, \hia)$ where 
+\begin{itemize}
+\item $\sia$ is the (finite) set of states of altruistic player $i$, 
+\item $\iia$ denotes the set of initial states, 
+\item $\aia$ is the set of actions, 
+\item $\gia$ is the set of atomic propositions defined on global states $\gs$ that serves as guard conditions of taking an action and gaining rewards,
+\item $\tia: [\phi] \sia \times \aia  \rightarrow \sia$, with $\phi$ being a first-order logic formula over $\gia$, specifies the transitions between states and the condition $\phi$ that needs to be satisfied for taking this transition,
+\item $\pia: \sia \times \aia \rightarrow [0, 1]$ such that $\forall s_i\in \sia, \sum_{a_i\in \aia} \pia(s_i, a_i)=1$ specifies the probabilities of taking an action at state $s_i$,
+\item $\hia$ has two functions $\ahia: \sia \times \aia \rightarrow \mathbb{R}$ specifies the pay-off of an action $a_i\in \aia$ at state $s_i\in \sia$, and $\shia: [\phi]\gs \rightarrow \mathbb{R}$ specifies the pay-off obtained after reaching states $\gs$ satisfying formula $\phi$.
+\end{itemize}
+%
+When the system is well-defined, altruistic players have either a probabilistic or a deterministic behaviour, that is, at state $s_i\in \sia$, there is either one action $a_i\in \aia$ or a set of probabilistic actions whose probabilities sum up to $1$. When the action is deterministic, the probability is omitted, since the probability is always $1$.
+
+\begin{example}\textit{A three-player Rock-paper-scissors game}\label{ex:rps}
+Consider a $3$-player machine-game version of Rock-paper-scissors derived from \cite{PH10}. We model playing rock, paper, and scissors as playing $0$, $1$, and $2$, respectively. We denote $(i,j,k)$ as the respective outcomes of players $p_1$, $p_2$ and $p_3$, denote $+$ as the operator for the addition modulo $3$ and denote $a = b \oplus c$ as $a = b$ or, exclusively, $a = c$. The pay-off of player $p_1$ for the outcome $(i, j, k)$ is $2$ if $j=k$ and $i = j + 1$ ($p_1$ wins uniquely), $1$ if $i=k\oplus j$ and $i-1 = (j\oplus k)$ (both $p_1$ and another player win), $-1$ if $i + 1=j\oplus k$ ($p_1$ loses to one player), $-2$ if $j=k$ and $j = i + 1$ ($p_1$ loses to both players), and $0$ if $i = j = k$ or $i+1=j\oplus k \land i-1=k\oplus j $ (no one wins and three players play the same, or $p_1$ wins one player but loses to another). Player $p_2$'s pay-off is similar to the pay-off of player $p_1$ after replacing $i,j,k$ by $j,k,i$ in player $p_2$'s pay-off conditions. Player $p_3$'s pay-off is the negatives of player $p_1$'s plus player $p_2$'s pay-off. %Note that the game is a zero-sum game. In the two-player zero-sum rock-paper-scissors game, playing uniformly, \emph{ie} with probability $1/3$, rock, paper or scissors is the unique Nash equilibrium of the game.
+\end{example}
+
+We model altruistic player's behaviour in Example~\ref{ex:rps} as follows.
+\begin{itemize}
+\item
+$\sia=\{s^a_1, s^a_2, s^a_3, s^a_4\}$, $\iia=\{s^a_1\}$, $\aia=\{0,1,2,\mi{replay}\}$, 
+\item
+$\gia=\{i = j, j = k, i = j + 1, j = i + 1, i=k\oplus j, i-1 = (j\oplus k), i + 1=j\oplus k \}$,
+\item
+$\tia(s^a_1, 0) = s^a_2,
+\tia(s^a_1, 1) = s^a_3,
+\tia(s^a_1, 2) = s^a_4,\\
+~[\phi]\tia(s^a_4,\mi{replay})= s^a_1,
+~[\phi]\tia(s^a_3,\mi{replay})= s^a_1,\\
+~[\phi]\tia(s^a_2,\mi{replay})= s^a_1,$\\
+with $\phi=\neg\big((j=k \land i = j + 1) \vee (i=k\land j=i+1) \vee (i=j\land k=i+1)\big)$,
+meaning that the game terminates when there is a unique winner, and continues otherwise,
+\item 
+$\pia(s^a_1, 0) = 1/3, \pia(s^a_1, 1)= 1/3, \pia(s^a_1, 2) = 1/3$, and action $\mi{replay}$ is deterministic,
+\item 
+$\shia(\gs)=\left\{\begin{array}{l}
+2\ \mbox{if}\ \gs \sat (j=k \land i = j + 1)\\
+1\ \mbox{if}\ \gs \sat (i=k\oplus j \land i-1 = (j\oplus k))\\
+0\ \mbox{if}\ \gs \sat ((i = j = k)\vee \\
+\hfill(i+1=j\oplus k \land i-1=k\oplus j))\\
+-1\ \mbox{if}\ \gs \sat (i + 1=j\oplus k)\\
+-2\ \mbox{if}\ \gs \sat (j=k \land j = i + 1).\\
+\end{array}\right. $
+\end{itemize}
+
+
+\subsection{Byzantine players}
+Byzantine players may randomly deviate from the protocol by 1) performing actions that are not specified in the protocol, or 2) performing a set of probabilistic actions with a different probabilistic distribution. The deviating actions at a state shall be specified by the BAR system. As we want to ensure the BAR-tolerance of protocols, we only consider the worst-case scenario for the rational players, meaning that we assume that the Byzantine players always perform an action that minimizes the pay-off of the rational player. This action is unique, for that any distribution over the actions would not minimise the rational player's pay-off larger than one single action. Hence, there is no probability distribution needed for Byzantine players. In addition, since Byzantine players randomly deviate, the guard conditions and pay-off function are not needed neither.
+
+Similar to the altruistic player, a Byzantine player can be formally modelled by a FSM, a tuple $\mathcal{M}^b_i=(\sib, \iib, \aib, \tib)$, where
+\begin{itemize}
+\item $\sib$ is the (finite) set of states of Byzantine player $i$, 
+\item $\iib$ denotes the set of initial states, 
+\item $\aib$ is the set of actions, 
+\item $\tib: \sib \times \aib \rightarrow \sib$ specifies the transitions between states.
+\end{itemize}
+
+Assume that the Byzantine players in Example~\ref{ex:rps} can only deviate from the specification by playing according to a different probability distribution than the uniform distribution. A Byzantine player is modelled as follows:
+\begin{itemize}
+\item
+$\sib=\{s^b_1, s^b_2, s^b_3, s^b_4\}$, $\iib=\{s^b_1\}$, $\aib=\{0,1,2, \mi{replay}\}$, 
+\item
+$\tib(s^b_1, 0) = s^b_2,
+\tib(s^b_1, 1) = s^b_3,
+\tib(s^b_1, 2) = s^b_4,\\
+\tib(s^b_4,\mi{replay})= s^b_1,
+\tib(s^b_3,\mi{replay})= s^b_1,\\ 
+\tib(s^b_2,\mi{replay})= s^b_1.$\\
+\end{itemize}
+
+\subsection{Rational players}
+Similar to Byzantine players, the rational players may also deviate from the protocol specification. Unlike Byzantine players, whose actions are random, the rational players' actions are driven by pay-offs, that is, at a state, the rational players choose the action that leads to larger pay-off. Similarly to the Byzantine players, this action is unique. In fact, a rational player has the same allowed transitions, states and actions as a Byzantine player. Unlike to the Byzantine players, the rational players need the pay-off function. Hence, a rational player can be formally modelled by a FSM, a tuple $\mathcal{M}^r_i=(\sir, \iir, \air, \gir, \tir, \hir)$, where
+\begin{itemize}
+\item $\sir$ is the (finite) set of states of rational player $i$, 
+\item $\iir$ denotes the set of initial states, 
+\item $\air$ is the set of actions, 
+\item $\gir$ is the set of atomic propositions defined on global states $\gs$ that serves as guard conditions of gaining rewards,
+\item $\tir: \sir \times \air \rightarrow \sir$ specifies the transitions between states,
+\item $\hir$ has two functions: $\ahir:\sir \times \air \rightarrow \mathbb{R}$ specifies the pay-off of an action $a_i\in \air$ at state $s_i\in \sir$, and $\shir: [\phi]\gs \rightarrow \mathbb{R}$ specifies the pay-off of reaching states $\gs$ satisfying formula $\phi$.
+\end{itemize}
+
+A rational player in Example~\ref{ex:rps} is modelled as follows:
+\begin{itemize}
+\item
+$\sir=\{s^r_1, s^r_2, s^r_3, s^r_4\}$, $\iir=\{s^r_1\}$, $\air=\{0,1,2, \mi{replay}\}$, 
+\item
+$\tir(s^r_1, 0) = s^r_2,
+\tir(s^r_1, 1) = s^r_3,\\
+\tir(s^r_1, 2) = s^r_4,
+\tir(s^r_4,\mi{replay})= s^r_1,\\
+\tir(s^r_3,\mi{replay})= s^r_1, 
+\tir(s^r_2,\mi{replay})= s^r_1,$
+\item
+$\gir=\gia$,
+\item 
+$\shir(\gs)=\left\{\begin{array}{l}
+2\ \mbox{if}\ \gs \sat (j=k \land i = j + 1)\\
+1\ \mbox{if}\ \gs \sat (i=k\oplus j \land i-1 = (j\oplus k))\\
+0\ \mbox{if}\ \gs \sat (i = j = k)\vee \\
+\hfill(i+1=j\oplus k \land i-1=k\oplus j))\\
+-1\ \mbox{if}\ \gs \sat (i + 1=j\oplus k)\\
+-2\ \mbox{if}\ \gs \sat (j=k \land j = i + 1).\\
+\end{array}\right. $
+\end{itemize}
+
+\subsection{Global graph}
+
+Given a finite set of players 
+%Byzantine players ($p_1,\ldots, p_m$), a finite set of players ($p_{m+1},\ldots, p_{n}$) who can behave as either rational or altruistic, 
+modelled as FSMs ($\{\mathcal{M}_1, \ldots, \mathcal{M}_n\}$), one can construct a global
+FSM $\mathcal{M}=(S, I, A, G, T, P, H)$ modelling the concurrent execution of player's FSMs.
+Note that in our algorithm, the global graph is constructed implicitly on-the-fly. 
+For the clearer presentation of our verification in the next section, we explicitly construct a global graph here
+to provide an intuition on how a global graph is constructed.
+
+%$\mathcal{M}_i=(S_i, I_i, A_i, G_i, T_i, P_i, H_i)$
+%if $i \le m$ then $M_i=M^b_i$. Else ${M}_i={M}^a_i$ or ${M}_i={M}^r_i$. 
+The global states in the global FSM is the product of the local states of each player, 
+i.e., $S= S_1 \times S_2 \times\cdots\times S_n$; the set of initial states is 
+$I = I_1 \times I_2 \times\cdots \times I_n$; the set of global actions 
+is $A=$ $A_1 \times A_2 \times \cdots\times A_n$; the set of atomic propositions
+is $G= G_1\cup G_2\cup \cdots\cup G_n$ ($G_i$ is empty if $\mathcal{M}_i$ models a Byzantine player).
+%If $i \le m$ then $G_i = \phi$ for the completeness of the global graph.
+
+Intuitively, the transition function $T$ is defined as
+$T(\langle s_1,\ldots, s_n\rangle, \langle a_1, \ldots, a_n\rangle)=\langle s'_1 \ldots, s'_n\rangle$
+where $T_i(s_i, a_i)=s'_i$ in $\mathcal{M}_i$ meaning that
+at state $\langle s_1,\ldots, s_n\rangle$ every player takes an action according
+to their local FSMs, then there is a transition in the global FSM. Note that we require
+that every player has to take an action: Altruistic players always follow the protocol specification to take an action;
+Byzantine and rational players may deviate from the specification by doing nothing or taking other actions, where
+the deviation actions, including doing nothing, shall be defined and modelled in the local FSMs. 
+We emphasize that we model each player's local actions rather than
+requiring the global FSM as input like in~\cite{MMSTACL08}. Hence, we need to additionally consider the 
+special cases where multiple users need to take actions at the same time, i.e., action synchronization,
+e.g., in Example~\ref{ex:rps}, three players need to take the $\mi{replay}$ action at the same time, in order
+to re-start the game. We support two ways of modelling synchronized actions: one
+is to model action as one name with an arity, (\emph{e.g.} the number of players), such that more than the arity number of players taking the action can be synchronized, \emph{e.g.}, 
+the $\mi{replay}/3$ means that at least three players want to re-start the game;
+the other is to define a pair of actions, for example $(\mi{send}, \mi{receive})$ in communication,
+meaning that whenever there is a $\mi{send}$ action and a $\mi{receive}$ action are enabled at a state,
+the synchronized action can be taken. The synchronized actions need to be tagged in a
+set $A_s$. Given a global action $\langle a_1, \ldots, a_n\rangle$, let $J(a)$ be defined as \\
+$\forall a/arity \in A_s$, $J(a) \subset \{1, \dots ,n\}$ s.t. $\forall j \in J(a)$ $a_j=a$ with $|J(a)|=arity$. $J(a)$ specifies the exact set of positions that the synchronised action $a/arity$ can be activated.
+
+In Example~\ref{ex:rps}, $A_s=\{\mi{replay}/3\}$. When an action $\langle a_1, \ldots, a_n\rangle$ 
+is enabled at a state $s_i$, if $a_i$ is in $A_s$, but there is no other action to synchronize with, for the simplicity 
+of modelling, we assume a failure state $s_f$ exists and $T(s, \langle a_1, \ldots, a_n\rangle)=s_f$. 
+ Formally,
+$T(s, \langle a_1, \ldots, a_n\rangle)=s_f$, if 
+$\exists a/arity \in A_s$ s.t. $0 < |J(a)| < n$.
+%$|\{a|a\in \{a_1,\ldots, a_n\}\land a/arity \in A_s\}|< arity$ or
+%$(a,b) \in A_s \land (|\{a|a\in \{a_1,\ldots, a_n\}|\neq |\{b|b\in \{a_1,\ldots, a_n\}|)$, 
+where $|A|$ denotes the number of elements in set $A$.
+
+Generally, the probabilistic function is 
+$P(\langle s_1,\ldots, s_n\rangle, \langle a_1, \ldots, a_n\rangle))=P_1(s_1, a_1) \times \ldots \times P_n(s_n, a_n)$.
+If $P_i(s_i, a_i)$ is not defined i.e., in the case of deterministic or non-deterministic actions, we set the probability value to be $1$.
+It is straightforward in the case that $a_i$ is a deterministic action. In the case of non-deterministic actions, once $a_i$ is chosen, it becomes deterministic, and thus the value is also $1$. 
+In such a way, the probability of the global action $\langle a_1, \ldots, a_n\rangle$ at state $\langle s_1,\ldots, s_n\rangle$ 
+i.e., $\prod_{i=1}^{n}P_i(s_i, a_i)$, actually captures the product of the probabilities of actions in $\{a_1, \ldots, a_n\}$,
+and thus the probabilities of all global actions at a state sum up to $1$. When no action is probabilistic in the global 
+action $\langle a_1, \ldots, a_n\rangle$, then we do not sign a probability to the action at the state, denoted as $P(\langle s_1,\ldots, s_n\rangle, \langle a_1, \ldots, a_n\rangle))=\circ$, meaning the probability is not defined.
+
+The pay-off function $AH$ is defined as
+$H(s,\langle a_1,\ldots, a_n\rangle)=\langle H_1(s,a_1), \ldots, H_n(s,a_n)\rangle$
+where $H_i(s,a_i)$ can be empty, denoted as $\star$, meaning that function $H_i$
+is not defined for action $a_i$ at state $s$. Similarly, $SH$ can be defined as,
+$H(\langle s_1,\ldots, s_n\rangle)=\langle H_1(s_1), \ldots, H_n(s_n)\rangle$.
+
+Given one altruistic player, one Byzantine player, one rational player, the 
+global FSM for Example~\ref{ex:rps} is constructed using the above way. Since
+there are too many states in the global FSM, we only demonstrate some interesting parts of the global FSM, for example, we only show the 
+states with incoming and outgoing transitions.
+\begin{itemize}
+\item $S=\{\langle s^a_1, s^b_1, s^r_1 \rangle, \langle s^a_2, s^b_2, s^r_2 \rangle, 
+\langle s^a_3, s^b_2, s^r_2\rangle, \langle s^a_2, s^b_3, s^r_2\rangle, \\
+\langle s^a_2, s^b_2, s^r_3\rangle, \langle s^a_3, s^b_3, s^r_2 \rangle,\langle s^a_3, s^b_2, s^r_3 \rangle,\langle s^a_2, s^b_3, s^r_3 \rangle,\\
+\langle s^a_3, s^b_3, s^r_3 \rangle, \langle s^a_4, s^b_2, s^r_2\rangle,
+\langle s^a_2, s^b_4, s^r_2\rangle, \langle s^a_2, s^b_2, s^r_4\rangle,\\
+\langle s^a_4, s^b_4, s^r_2\rangle, \langle s^a_4, s^b_2, s^r_4\rangle,
+\langle s^a_2, s^b_4, s^r_4\rangle, \langle s^a_4, s^b_4, s^r_4\rangle,\\
+\langle s^a_3, s^b_4, s^r_4\rangle, \langle s^a_4, s^b_3, s^r_4\rangle,
+\langle s^a_4, s^b_4, s^r_3\rangle, \langle s^a_3, s^b_3, s^r_4\rangle,\\
+\langle s^a_3, s^b_4, s^r_3\rangle, \langle s^a_4, s^b_3, s^r_3\rangle
+\}$,
+\item $I=\{\langle s^a_1, s^b_1, s^r_1 \rangle\}$,
+\item $A=\{\langle a_1, a_2, a_3 \rangle | a_1, a_2, a_3 \in \{0,1,2, \mi{replay}\}$ and $A_s=\{\mi{replay}/3\}$,
+\item $G=\gia$,
+\item 
+The playing transitions are:\\
+$T(\langle s^a_1, s^b_1, s^r_1 \rangle, \langle 0, 0, 0 \rangle)=\langle s^a_2, s^b_2, s^r_2\rangle$,\\
+$T(\langle s^a_1, s^b_1, s^r_1 \rangle, \langle 1, 0, 0\rangle)=\langle s^a_3, s^b_2, s^r_2\rangle$, \\
+$T(\langle s^a_1, s^b_1, s^r_1 \rangle, \langle 0, 1, 0\rangle)=\langle s^a_2, s^b_3, s^r_2\rangle$, \\
+$T(\langle s^a_1, s^b_1, s^r_1 \rangle, \langle 0, 0, 1\rangle)=\langle s^a_2, s^b_2, s^r_3\rangle$, \\
+$T(\langle s^a_1, s^b_1, s^r_1 \rangle, \langle 1, 1, 0\rangle)=\langle s^a_3, s^b_3, s^r_2\rangle$, \\
+$T(\langle s^a_1, s^b_1, s^r_1 \rangle, \langle 1, 0, 1\rangle)=\langle s^a_3, s^b_2, s^r_3\rangle$, \\
+$T(\langle s^a_1, s^b_1, s^r_1 \rangle, \langle 0, 1, 1\rangle)=\langle s^a_2, s^b_3, s^r_3\rangle$, \\
+$T(\langle s^a_1, s^b_1, s^r_1 \rangle, \langle 1, 1, 1\rangle)=\langle s^a_3, s^b_3, s^r_3\rangle$, \\
+$T(\langle s^a_1, s^b_1, s^r_1 \rangle, \langle 2, 0, 0\rangle)=\langle s^a_4, s^b_2, s^r_2\rangle$, \\
+$T(\langle s^a_1, s^b_1, s^r_1 \rangle, \langle 0, 2, 0\rangle)=\langle s^a_2, s^b_4, s^r_2\rangle$, \\
+$T(\langle s^a_1, s^b_1, s^r_1 \rangle, \langle 0, 0, 2\rangle)=\langle s^a_2, s^b_2, s^r_4\rangle$, \\
+$T(\langle s^a_1, s^b_1, s^r_1 \rangle, \langle 2, 2, 0\rangle)=\langle s^a_4, s^b_4, s^r_2\rangle$, \\
+$T(\langle s^a_1, s^b_1, s^r_1 \rangle, \langle 2, 0, 2\rangle)=\langle s^a_4, s^b_2, s^r_4\rangle$, \\
+$T(\langle s^a_1, s^b_1, s^r_1 \rangle, \langle 0, 2, 2\rangle)=\langle s^a_2, s^b_4, s^r_4\rangle$, \\
+$T(\langle s^a_1, s^b_1, s^r_1 \rangle, \langle 2, 2, 2\rangle)=\langle s^a_4, s^b_4, s^r_4\rangle$, \\
+$T(\langle s^a_1, s^b_1, s^r_1 \rangle, \langle 1, 2, 2\rangle)=\langle s^a_3, s^b_4, s^r_4\rangle$, \\
+$T(\langle s^a_1, s^b_1, s^r_1 \rangle, \langle 2, 1, 2\rangle)=\langle s^a_4, s^b_3, s^r_4\rangle$, \\
+$T(\langle s^a_1, s^b_1, s^r_1 \rangle, \langle 2, 2, 1\rangle)=\langle s^a_4, s^b_4, s^r_3\rangle$, \\
+$T(\langle s^a_1, s^b_1, s^r_1 \rangle, \langle 1, 1, 2\rangle)=\langle s^a_3, s^b_3, s^r_4\rangle$, \\
+$T(\langle s^a_1, s^b_1, s^r_1 \rangle, \langle 1, 2, 1\rangle)=\langle s^a_3, s^b_4, s^r_3\rangle$, \\
+$T(\langle s^a_1, s^b_1, s^r_1 \rangle, \langle 2, 1, 1\rangle)=\langle s^a_4, s^b_3, s^r_3\rangle$,
+\item
+and the re-start transitions are:\\
+$T(\langle s^a_2, s^b_2, s^r_2 \rangle, \langle \mi{replay},\mi{replay}, \mi{replay} \rangle)=\langle s^a_1, s^b_1, s^r_1\rangle$,\\
+$T(\langle s^a_3, s^b_3, s^r_2 \rangle, \langle \mi{replay},\mi{replay}, \mi{replay} \rangle)=\langle s^a_1, s^b_1, s^r_1\rangle$,\\
+$T(\langle s^a_3, s^b_2, s^r_3 \rangle, \langle \mi{replay},\mi{replay}, \mi{replay} \rangle)=\langle s^a_1, s^b_1, s^r_1\rangle$,\\
+$T(\langle s^a_2, s^b_3, s^r_3\rangle, \langle \mi{replay},\mi{replay}, \mi{replay} \rangle)=\langle s^a_1, s^b_1, s^r_1\rangle$,\\
+$T(\langle s^a_3, s^b_3, s^r_3\rangle, \langle \mi{replay},\mi{replay}, \mi{replay} \rangle)=\langle s^a_1, s^b_1, s^r_1\rangle$,\\
+$T(\langle s^a_4, s^b_2, s^r_2\rangle, \langle \mi{replay},\mi{replay}, \mi{replay} \rangle)=\langle s^a_1, s^b_1, s^r_1\rangle$,\\
+$T(\langle s^a_2, s^b_4, s^r_2\rangle, \langle \mi{replay},\mi{replay}, \mi{replay} \rangle)=\langle s^a_1, s^b_1, s^r_1\rangle$,\\
+$T(\langle s^a_2, s^b_2, s^r_4\rangle, \langle \mi{replay},\mi{replay}, \mi{replay} \rangle)=\langle s^a_1, s^b_1, s^r_1\rangle$,\\
+$T(\langle s^a_4, s^b_4, s^r_4\rangle, \langle \mi{replay},\mi{replay}, \mi{replay} \rangle)=\langle s^a_1, s^b_1, s^r_1\rangle$,\\
+$T(\langle s^a_3, s^b_4, s^r_4\rangle, \langle \mi{replay},\mi{replay}, \mi{replay} \rangle)=\langle s^a_1, s^b_1, s^r_1\rangle$,\\
+$T(\langle s^a_4, s^b_3, s^r_4\rangle, \langle \mi{replay},\mi{replay}, \mi{replay} \rangle)=\langle s^a_1, s^b_1, s^r_1\rangle$,\\
+$T(\langle s^a_4, s^b_4, s^r_3\rangle, \langle \mi{replay},\mi{replay}, \mi{replay} \rangle)=\langle s^a_1, s^b_1, s^r_1\rangle$.\\
+The re-start transitions only happen when there is no unique winner. When there is
+a unique winner, the game terminates. In this case, although the Byzantine player's and the rational player's $\mi{replay}$ actions are enabled, there will not be a global transition, because the rational player will not take an action.
+\item $P(\langle s^a_1, s^b_1, s^r_1 \rangle, \langle 0, a_i, a_j \rangle)= 1/3 \times 1 \times 1 =1/3$ (the Byzantine and rational player actions $a_i, a_j$ are non-deterministic, and thus $P^b(s^b_1, a_i)=1$, $P^r(s^r_1, a_j)=1$),\\
+Similarly, $P(\langle s^a_1, s^b_1, s^r_1 \rangle, \langle 1, a_i, a_j \rangle)= 1/3$, $P(\langle s^a_1, s^b_1, s^r_1 \rangle, \langle 2, a_i, a_j \rangle)= 1/3$. In addition, $P(\langle s^a_i, s^b_j, s^r_k \rangle, \langle \mi{replay},\mi{replay}, \mi{replay}  \rangle)= \circ$
+\item $SH(s,\langle a_1, a_2, a_3 \rangle)=\\
+\left\{\begin{array}{l}
+\langle 2, -1, \star \rangle\ \mbox{if}\ \gs \sat (j=k \land i = j + 1)\\
+\langle -1, 2, \star \rangle\ \mbox{if}\ \gs \sat (i=k \land i+1 = j)\\
+\langle -1, -1, \star \rangle\ \mbox{if}\ \gs \sat (i= j \land i+1 = k)\\
+\langle 0, 0, \star\rangle\ \mbox{if}\ \gs \sat (i = j = k)\\
+\langle 0, 0,\star\rangle\ \mbox{if}\ \gs \sat (i + 1=j, j+1=k)\\
+\langle 0, 0,\star\rangle\ \mbox{if}\ \gs \sat (i + 1=k, k+1=j)\\
+\langle -2, 1, \star \rangle\ \mbox{if}\ \gs \sat (j=k \land j = i + 1).\\
+\end{array}\right. $
+\end{itemize}
+Note that in this example we do not distinguish the global event and the global state since a global event always leads to a unique global state.
+

@@ -1,0 +1,407 @@
+\section{Case study}\label{sec:casestudy}
+We apply our algorithm on a case study with perfect information, the three-player Rock-Paper-Scissors, and on another with imperfect information, the secret sharing protocol from Halpern and al. \cite{ADGH06}.
+
+\subsection{Rock-Paper-Scissors game}
+
+We analyse two strategies of the Rock-Paper-Scissors game in Example \ref{ex:rps}: each player has
+equally distributed probability on playing rock, paper and scissors 
+($1/3$ for playing rock, $1/3$ for playing paper, and $1/3$ for playing scissors); 
+and each player has unequal probability distribution ($1/5$ for playing rock, $1/5$ for playing paper, and $3/5$ for playing scissors). 
+For each strategy, we analyse two scenarios: no Byzantine players, and having one Byzantine player. 
+
+\subsubsection{Equal probability strategy}
+\paragraph{No Byzantine Players}
+When there is no Byzantine players ($m=0$), to verify whether the equally distributed probability strategy is a Nash-equilibrium, we actually need to 
+verify the following conditions, according to the definition of Nash-equilibrium in the section \ref{sec:verification}.
+\begin{enumerate}
+\item
+$U_1(\langle s_1^a,s_1^a,s_1^a \rangle ) \geq V_1(\langle s_1^r,s_1^a,s_1^a  \rangle )$
+\item
+$U_2(\langle s_1^a,s_1^a,s_1^a  \rangle ) \geq V_2(\langle s_1^a,s_1^r,s_1^a  \rangle )$
+\item
+$U_3(\langle s_1^a,s_1^a,s_1^a  \rangle ) \geq V_3(\langle s_1^a,s_1^a,s_1^r  \rangle )$
+\end{enumerate}
+Symbol $s_1^a$ is the initial state for an altruistic player as defined in the altruistic player modelling in Section~\ref{ssec:al}.
+Similarly, $s_1^r$ is the initial state for a rational player. Assuming three altruistic players, the global initial state is $\langle s_1^a,s_1^a,s_1^a \rangle$. When the first player is a rational player, the initial global state is $\langle s_1^r,s_1^a,s_1^a  \rangle$. 
+$U_1(\langle s_1^a,s_1^a,s_1^a \rangle )$ is the maximum guaranteed expected pay-off for player $p_1$ when $p_1$ is altruistic; $V_1(\langle s_1^r,s_1^a,s_1^a  \rangle )$ is the maximum guaranteed expected pay-off for player $p_1$ when $p_1$ is rational, i.e., may deviate from the equal probability strategy. Hence, the first condition says that player $p_1$ would not deviate from the specified strategy since the deviation pay-off
+is smaller. Similarly, the second condition ensures that $p_2$ would not deviate and the third condition ensures that $p_3$ would not deviate.
+
+Since the behaviour of all altruistic players are exactly the same, the three conditions are symmetrical. Hence, it is sufficient to prove one of the above conditions. Assume the game ends, if and only if there is a unique winner.
+The verification result shows that the equal probabilistic strategy is a Nash-equilibrium. We provide the intuition of the result by illustrating the first condition, i.e., reasoning on player $p_1$'s behaviour, as follows.
+
+For each iteration, we need to consider  the following two cases, corresponding to $U_1(\langle s_1^a,s_1^a,s_1^a \rangle ) $ and $V_1(\langle s_1^r,s_1^a,s_1^a  \rangle )$ respectively. We show that the probability of ending the game in both of the two cases are the same and the pay-off of $p_1$ in both cases are the same as well.
+\begin{itemize}
+	\item {\textit{Player $p_1$ is altruistic.}} 
+	Since each player has three actions (plying rock, paper, or scissors) and the probability of each action is $\frac{1}{3}$, there are in total $27$ outcomes and each outcome has probability $\frac{1}{3} \times \frac{1}{3} \times \frac{1}{3} = \frac{1}{27}$. Among all the outcomes, there are $9$ outcomes that lead to a unique winner, which end the game. Thus, the probability that the game ends in one iteration 
+	is $9 \times \frac{1}{27} = \frac{1}{3}$. The expected pay-off of $p_1$ is $\frac{1}{27}\times ep_a^1 +\ldots + \frac{1}{27}\times ep_a^{27}$ where $ep_a^i$
+	is the expected pay-off for outcome $i$. We show that the value of the expected pay-off is $0$. For instance, if we fix $p_1$'s action as playing rock $0$, the outcomes together with the pay-offs are showing in Table~\ref{tab:1}. Since, the probability of each outcome is the same, the expected pay-off in this case is obviously $0$ (Pay-offs cancel out, see Table~\ref{tab:1}). Similarly when $p_1$ plays other actions. Hence the total pay-off for $p_1$ is $0$.  
+%	There are $3$ possibilities for the choice of winning player and $3$ possibilities for the choice of winning move by the winning player. Altogether, there are $3 \times 3= 9$ outcomes that have a unique winner. So, the probability of game ending in the first iteration is $9 \times \frac{1}{27} = \frac{1}{3}$ 
+	\item {\textit{Player $p_1$ is rational.}} Since $p_1$ is rational, he can choose any action with any probability. To show the ending probability of the game, we show that for any action of $p_1$, the probability to end the game is exactly $\frac{1}{3}$ as follows. Given a certain action of $p_1$, there are $9$ outcomes and each outcome has probability $\frac{1}{3} \times \frac{1}{3} = \frac{1}{9}$. Among these $9$ outcomes, there are $3$ outcomes with a unique winner. 
+	Hence, the probability of having a unique winner for any choice of player $p_1$ is $3 \times \frac{1}{9}=\frac{1}{3}$.
+	Similarly, for calculating the pay-offs, given one action of $p_1$, her expected pay-off is $0$ (see from Table~\ref{tab:1}). Hence, for any probabilistic distribution of $p_1$'s actions, the expected pay-off is $0$.
+	%Choice is made over the set of players. For example,\\
+	%if player $1$ plays $R$, then unique winning positions are\\
+	%$(R,S,S)$ ,$(R,P,R)$ and $(R,R,P)$. The probability of having a unique winner for each choice of player $1$ is $3 \times \frac{1}{9}=\frac{1}{3}$. However, we don't know which move gives player $1$ the maximum expected pay-off. By adding parametric values for each player's move we will be to prove that, any choice of player $1$ results in the same expected pay-off in the first iteration because, possibilities are similar in each case.\\
+	%We have $3$ possibilities for a unique winner, $3$ possibilities for exactly two winners and $3$ possibilities for no winners. So, we can conclude that in this case, probability of the game having a unique winner is $\frac{1}{3}$.
+	    
+\end{itemize}
+
+When the iteration is infinite, $U_1(\langle s_1^a,s_1^a,s_1^a \rangle )$ is calculated as $ep_a + \frac{2}{3}\times ep_a + \frac{2}{3}^2 \times ep_a + \dots$
+where $ep_a$ is the expected pay-off of each iteration, $\frac{2}{3}$ is the probability of continue the game. Since $ep_a$ is $0$, $U_1(\langle s_1^a,s_1^a,s_1^a \rangle )=0$. Similarly, $V_1(\langle s_1^r,s_1^a,s_1^a  \rangle )=0$. Thus, the first condition $U_1(\langle s_1^a,s_1^a,s_1^a \rangle ) \geq V_1(\langle s_1^r,s_1^a,s_1^a  \rangle )$ is satisfied. The other two conditions can be proved in a similar way, especially they are symmetrical to the first condition.
+
+
+%In both of the scenarios, the probability of having a unique winner is $\frac{1}{3}$, which implies that the probability of restarting the game is $\frac{2}{3}$. In fact, for any iteration, the probability of restarting the game is $\frac{2}{3}$. Let the expected pay-offs for the rational and altruistic player in the first iteration be $ep_r$ and $ep_a$ respectively. For a given player's behaviour, any iteration would produce the same expected pay-off before weighting by the probability of occurrence of the particular iteration.(choices across the iterations are independent) To calculate the long-term expected pay-off, we have to calculate weighted sum of the expected pay-offs in each iteration. This sum produces a geometric series.
+
+%For rational player,
+%$ep_r + \frac{2}{3}ep_r + \frac{2}{3}^2ep_r + \dots$ 
+%The sum of the geometric series converges to $3ep_r$. Similarly, we obtain a sum of $3ep_a$ for an Altruistic player. Now, what is left, is determining $ep_r$ and $ep_a$ for player $1$.
+
+%Different pay-offs for a rational player is shown in table \ref{tab:rhh}.
+
+\begin{table}[]
+	\centering
+	\caption{Pay-offs of player $p_1$ when playing rock}\label{tab:1}
+	\label{tab:rhh}
+	\begin{tabular}{|l|l|l|l|l|l|l|l|l|l|}
+		\hline
+		i & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+		\hline
+		j & 0 & 0 & 0 & 1 & 1 & 1 & 2 & 2 & 2\\
+		\hline
+		k & 0 & 1 & 2 & 0 & 1 & 2 & 0 & 1 & 2\\
+		\hline
+		pay-off & 0 & -1 & 1 & -1 & -2 & 0 & 1 & 0 & 2\\
+		\hline
+		%i & j & k & pay-off \\ \hline
+		%R & R & R & 0       \\ \hline
+		%R & R & P & -1      \\ \hline
+		%R & R & S & 1       \\ \hline
+		%R & P & R & -1      \\ \hline
+		%R & P & P & -2      \\ \hline
+		%R & P & S & 0       \\ \hline
+		%R & S & R & 1       \\ \hline
+		%R & S & P & 0       \\ \hline
+		%R & S & S & 2      \\ \hline
+	\end{tabular}
+\end{table}
+
+
+%The weighted sum of pay-offs for the choice $R$ is $0$. Since the weighted summations for the other choices are also the same and eac probability weight is equal ($\frac{1}{9}$), $ep_r = 0$ . Long term expected pay-off $V_1(\langle s_1^b,s_1^a,s_1^a  \rangle )=0$. \\
+%This table accounts for a $\frac{1}{3}$ of the entries for the altruistic player as well. It can be observed that weighted sum of the pay-offs, $U_1(\langle s_1^a,s_1^a,s_1^a  \rangle )=0$.\\
+%$U_1(\langle s_1^a,s_1^a,s_1^a  \rangle ) \geq  V_1(\langle s_1^b,s_1^a,s_1^a  \rangle ) $. Hence, The altruistic strategy constitutes a Nash-equilibrium when no Byzantine player is present.
+
+
+\paragraph{One Byzantine Player}
+
+Assume player $p_1$ is Byzantine ($m=1$), to verify whether the equally distributed probability strategy is a Nash-equilibrium, we need to 
+verify the following conditions, according to the definition of NE in section \ref{sec:verification}.
+\begin{enumerate}
+\item
+$U_2(\langle s_1^b,s_1^a,s_1^a \rangle ) \geq V_2(\langle s_1^b,s_1^r,s_1^a  \rangle )$
+\item
+$U_3(\langle s_1^b,s_1^a,s_1^a  \rangle ) \geq V_3(\langle s_1^b,s_1^a,s_1^r  \rangle )$
+\end{enumerate}
+The verification result shows that the equal probabilistic strategy is a Nash-equilibrium as well when $p_1$ is Byzantine. The intuitions are as follows.
+
+%By considering the symmetry properties mentioned in the previous scenario, let us assume that player $1$ has the choice of being rational or altruistic while player $2$ is always Byzantine.
+%$Z=\{2\}$
+ 
+Similarly, for each iteration, we consider the following two cases.
+Like the previous case with no Byzantine player, the probability of ending the game in both cases are the same $\frac{1}{3}$. Unlike the previous case, the
+pay-offs in the two cases differ from each other.
+\begin{itemize}
+	\item {\textit {Player $p_2$ is altruistic.}} Recall that the Byzantine player only has non-deterministic actions at each state. According to the algorithm, we always consider the action of the Byzantine player that leads to the worst case of pay-off for player $p_2$, i.e., we only consider the $p_1$'s action that minimize $p_2$'s expected pay-off.% Since player $1$ is altruistic here he has no choice here rather than executing her probabilistic strategy. Byzantine player has $3$ choices. If he plays $R$ then,\\
+For each action of Byzantine player $p_1$, we calculate the expected pay-off of $p_2$. For example, if $p_1$ plays rock $0$, the pay-offs of $p_2$ for each outcome are shown in Table~\ref{tab:2}. The probability of each outcome is exactly $\frac{1}{9}$. Hence the expected pay-off of $p_2$ is $0$. Similarly, for the other two actions of $p_1$, the expected pay-offs of $p_2$ are $0$ as well.
+	%We have $9$ combinations which includes $3$ unique winner positions, $3$ two winner positions and $3$ no winner positions. Similar to the previous scenario, we have $\frac{2}{3}$ probability of moving towards the next iteration, given that play is performed in the current iteration. The payoffs can be interpreted by interchanging $1st$ and $2nd$ columns in Table \ref{tab:rhh}.  
+	
+	\begin{table}[]
+		\centering
+		\caption{Pay-offs of player $p_2$ when $p_1$ plays rock}\label{tab:2}
+		\label{tab:hbh}
+		\begin{tabular}{|l|l|l|l|l|l|l|l|l|l|}
+		\hline
+		i & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+		\hline
+		j & 0 & 0 & 0 & 1 & 1 & 1 & 2 & 2 & 2\\	
+		\hline
+		k & 0 & 1 & 2 & 0 & 1 & 2 & 0 & 1 & 2\\
+		\hline
+		pay-off & 0 & -1 & 1 & 2 & 1 & 0 & -2 & 0 & -1 \\
+			\hline
+			%i & j & k & pay-off \\ \hline
+			%R & R & R & 0       \\ \hline
+			%R & R & P & -1      \\ \hline
+			%R & R & S & 1       \\ \hline
+			%P & R & R & 2      \\ \hline
+			%P & R & P & 1      \\ \hline
+			%P & R & S & 0       \\ \hline
+			%S & R & R & -2       \\ \hline
+			%S & R & P & 0       \\ \hline
+			%S & R & S & -1      \\ \hline
+		\end{tabular}
+	\end{table}
+	
+	%Expected pay-off is exactly similar to that of rational player $1$ at the presence of no Byzantines. For each move of the Byzantine player the expected pay-off is $0$. Hence, $ep_a=0$. We obtain the same geometric series for the long-term expected pay-off $U_1(\langle s_1^a,s_1^b,s_1^a  \rangle )$ and the final answer is $0$.
+	
+	\item {\textit{Player $p_2$ is rational.}} Since $p_2$ is rational, her actions can have any probabilistic distribution.
+	Similar to the case with no Byzantine player, we consider the pay-off for each action of $p_2$. Technically, we consider the pay-off of $p_2$ given any  combination of $p_1$'s action and $p_2$'s action. Recall that we only need to consider $p_1$'s action that leads to the worse case for $p_2$. Given $p_2$'s action, $p_1$'s action is decided. For example, when $p_2$ plays rock, the action of $p_1$ that leads to the worst case for $p_2$ is playing paper. The pay-offs when $p_2$ plays rock for each outcome is given in Table~\ref{tab:3}. Hence, the expected pay-off of $p_2$ when playing rock $\frac{1}{3} \times (-1 + -2 + 0) = -1$. For the other two actions of $p_2$, the expected pay-off is calculated in a similar way. Due to the symmetric property, the expected pay-off of $p_2$ when playing the other two actions are $-1$ as well. Hence, the expected pay-off of $p_2$ is $-1$. Note that unlike the previous case with no Byzantine players, the rational player's pay-off decreased when a Byzantine player is presented.
+		
+	%This case is interesting since two players have non-deterministic choice. Since, Byzantine player is trying to make things worse for player $1$, he would never let player $1$ win. If player $2$ plays the move which is better than the player $1$'s move he always injects $-1$ pay-off to the pay-off injected by player $3$.Since he cannot change the pay-off injected by player $3$, this is the best choice of player $2$. So, when player $1$ plays $R$ , player $2$ plays $P$ \\
+	%when player $1$ plays $P$ , player $2$ plays $S$ \\
+	%when player $1$ plays $S$ , player $2$ plays $R$ \\
+	%Table \ref{rbh} shows player $1$'s pay-off for move $R$, at the presence of Byzantine player $2$.  For any other move of the rational player $1$ we obtain the same expected utility. So, any choice is an optimal choice. $ep_r=-1$. We obtain a similar geometric series and its summation is,\\
+	%$3ep_r=3 \times -1 = -3$. $V_1(\langle s_1^b,s_1^b,s_1^a  \rangle )=-1$.
+	
+	\begin{table}[]
+		\centering
+		\caption{Pay-offs of player $p_2$ when playing rock}\label{tab:3}
+		\label{rbh}
+		\begin{tabular}{|l|l|l|l|}
+			\hline
+			i & 1 & 1 & 1\\
+			\hline
+			j & 0 & 0 & 0\\
+			\hline 
+			k & 0 & 1 & 2 \\
+			\hline
+			pay-off & -1 & -2 & 0\\
+			\hline 
+			
+			%i & j & k & pay-off \\ \hline
+			%R & P & R & -1      \\ \hline
+			%R & P & P & -2      \\ \hline
+			%R & P & S & 0       \\ \hline
+		\end{tabular}
+	\end{table}
+	
+\end{itemize}
+
+Therefore, $U_2(\langle s_1^b,s_1^a,s_1^a  \rangle )= ep_a + \frac{2}{3} \times ep_a + \frac{2}{3}^2 \times ep_a + \dots$, where $ep_a$ is the expected pay-off of $p_2$ in each iteration. Since $ep_a=0$, we have $U_2(\langle s_1^b,s_1^a,s_1^a  \rangle )=0$. Similarly, $V_2(\langle s_1^b,s_1^r,s_1^a  \rangle )= -1 + \frac{2}{3} \times (-1)+ \frac{2}{3}^2 \times (-1) + \dots \approx -3$ meaning that the value converges to $-3$.
+Thus, we have $U_2(\langle s_1^b,s_1^a,s_1^a  \rangle ) \geq V_2(\langle s_1^b,s_1^r,s_1^a  \rangle )$. Similarly, we have $U_3(\langle s_1^b,s_1^a,s_1^a  \rangle ) \geq V_3(\langle s_1^b,s_1^r,s_1^a  \rangle )$. It means that the equal probability strategy is a Nash-equilibrium, when $p_1$ is Byzantine. 
+
+\subsubsection{Unequal probability strategy}
+Given the probabilistic strategy of the altruistic player $\langle \frac{1}{5},\frac{1}{5},\frac{3}{5} \rangle$, we analyse the above two scenarios -- without Byzantine players and with one Byzantine player. 
+Differing from the case of equal probability strategy, in the unequal probability strategy, the probability of each outcome becomes unequal as well.
+This introduces difficulties in calculation of the expected pay-offs. For the simplicity of calculation, we group the outcomes with the same probability and obtain the following classes, such that we do not need to consider the total $27$ outcomes every time.
+\begin{itemize}
+	\item Unique winner and the winner plays $0$
+	\item Unique winner and the winner plays $1$
+	\item Unique winner and the winner plays $2$
+	\item Unique loser and the loser plays $0$
+	\item Unique loser and the loser plays $1$
+	\item Unique loser and the loser plays $2$
+	\item Each player plays $0$
+	\item Each player plays $1$
+	\item Each player plays $2$
+	\item other cases
+\end{itemize}
+
+\begin{figure*}[!t]
+\scriptsize
+ \center
+ \begin{adjustbox}{width=\textwidth}
+\begin{tikzpicture}[shorten >=1pt,node distance=1.5cm,on grid,auto] 
+	\node[state,initial] (q_0)   {$q_0$}; 
+	\node[state] (q_1) [above right=1.4cm and 1.5cm of q_0] {$q_1$}; 
+	\node[state] (q_2) [below right=1.4cm and 1.5cm of q_0] {$q_2$}; 
+	\node[state] (q_3) [above right=0.7cm and 1.5cm of q_1] {$q_3$}; 
+	\node[state] (q_6) [below right=0.7cm and 1.5cm of q_2] {$q_6$}; 
+	\node[state] (q_4) [below right=0.7cm and 1.5cm of q_1] {$q_4$}; 
+	\node[state] (q_5) [above right=0.7cm and 1.5cm of q_2] {$q_5$}; 
+	\path[->] 
+	(q_0) edge  node {$c_i | \alpha$} (q_1)
+	edge  node [swap] {$nc_i | 1 - \alpha$} (q_2)
+	(q_1) edge  node {$c_{(i,+)} | 0.5$} (q_3)
+	edge  node [swap] {$nc_{(i,+)} | 0.5$} (q_4)
+	(q_2) edge  node {$c_{(i,+)} | 0.5$} (q_5)
+	edge  node [swap] {$nc_{(i,+)} | 0.5$} (q_6);
+	
+	\node[state] (q_7) [right=3.5cm of q_3] {$q_7$};
+	\node[state] (q_8) [right=3.5cm of q_4] {$q_8$};
+	\node[state] (q_9) [right=3.5cm of q_5] {$q_9$};
+	\node[state] (q_{10}) [right=3.5cm of q_6] {$q_{10}$}; 
+	\node[state] (q_{11}) [right=of q_7] {$q_{11}$}; 
+	\node[state] (q_{12}) [right=of q_8] {$q_{12}$};
+	\node[state] (q_{13}) [right=of q_9] {$q_{13}$};
+	\node[state] (q_{14}) [right=of q_{10}] {$q_{14}$};
+	\node[state] (q_{15}) [right=of q_{11}] {$q_{15}$}; 
+	\node[state] (q_{16}) [right=of q_{12}] {$q_{16}$};
+	\node[state] (q_{17}) [right=of q_{13}] {$q_{17}$};
+	\node[state] (q_{18}) [right=of q_{14}] {$q_{18}$};
+	\node[state] (q_{19}) [right=of q_{15}] {$q_{19}$}; 
+	\node[state] (q_{20}) [right=of q_{16}] {$q_{20}$}; 
+	\node[state] (q_{21}) [right=of q_{17}] {$q_{21}$}; 
+	\node[state] (q_{22}) [right=of q_{18}] {$q_{22}$}; 
+	\node[state] (q_{23}) [right=of q_{19}] {$q_{23}$}; 
+	\node[state] (q_{24}) [right=of q_{20}] {$q_{24}$}; 
+	\node[state] (q_{25}) [right=of q_{21}] {$q_{25}$}; 
+	\node[state] (q_{26}) [right=of q_{22}] {$q_{26}$}; 
+      \node[state] (q_{27}) [right=3cm of q_{23}] {$q_{27}$}; 
+      \node[state] (q_{28}) [right=3cm of q_{24}] {$q_{28}$}; 
+      \node[state] (q_{29}) [right=3cm of q_{25}] {$q_{29}$}; 
+      \node[state] (q_{30}) [right=3cm of q_{26}] {$q_{30}$}; 
+	\node[state] (q_{31}) [right=of q_{27}] {$q_{31}$}; 
+	\node[state] (q_{32}) [right=of q_{28}] {$q_{32}$}; 
+	\node[state] (q_{33}) [right=of q_{29}] {$q_{33}$}; 
+	\node[state] (q_{34}) [right=of q_{30}] {$q_{34}$}; 
+	\node[state] (q_{35}) [right=4cm of q_{31}] {$q_{35}$}; 
+	\node[state] (q_{36}) [right=4cm of q_{32}] {$q_{36}$}; 
+	\node[state] (q_{37}) [right=4cm of q_{33}] {$q_{37}$}; 
+	\node[state] (q_{38}) [right=4cm of q_{34}] {$q_{38}$}; 
+	\node[state] (q_{39}) [right=4cm of q_{35}] {$q_{39}$}; 
+	\node[state] (q_{40}) [right=4cm of q_{36}] {$q_{40}$}; 
+	\node[state] (q_{41}) [right=4cm of q_{37}] {$q_{41}$}; 
+	\node[state] (q_{42}) [right=4cm of q_{38}] {$q_{42}$}; 
+	\path[->] 
+	(q_3) edge  node {$c_{(i,-)}=c_i \xor c_{(i,+)}$} (q_7)
+	(q_4) edge  node {$c_{(i,-)}=c_i \xor nc_{(i,+)}$} (q_8)
+	(q_5) edge  node {$c_{(i,-)}=nc_i \xor c_{(i,+)}$} (q_9)
+	(q_6) edge  node {$c_{(i,-)}=nc_i \xor nc_{(i,+)}$} (q_{10})
+	(q_7) edge  node {s $c_{(i,+)}$} (q_{11})
+	(q_8) edge  node {s $c_{(i,+)}$} (q_{12})
+	(q_9) edge  node {s $c_{(i,+)}$} (q_{13})
+	(q_{10}) edge  node {s $c_{(i,+)}$} (q_{14})
+	(q_{11}) edge  node {s $c_{(i,-)}$} (q_{15})
+	(q_{12}) edge  node {s $c_{(i,-)}$} (q_{16})
+	(q_{13}) edge  node {s $c_{(i,-)}$} (q_{17})
+	(q_{14}) edge  node {s $c_{(i,-)}$} (q_{18})
+	(q_{15}) edge[bend left]  node {r $c_{(i^+,-)}$} (q_{19})
+	(q_{15}) edge[bend right]  node[swap] {r $nc_{(i^+,-)}$} (q_{19})
+	(q_{16}) edge[bend left]  node {r $c_{(i^+,-)}$} (q_{20})
+	(q_{16}) edge[bend right]  node[swap] {r $nc_{(i^+,-)}$} (q_{20})
+	(q_{17}) edge[bend left]  node {r $c_{(i^+,-)}$} (q_{21})
+	(q_{17}) edge[bend right]  node[swap] {r $nc_{(i^+,-)}$} (q_{21})
+	(q_{18}) edge[bend left]  node {r $c_{(i^+,-)}$} (q_{22})
+	(q_{18}) edge[bend right]  node[swap] {r $nc_{(i^+,-)}$} (q_{22})
+	(q_{19}) edge[bend left]  node {r $c_{(i^-,+)}$} (q_{23})
+	(q_{19}) edge[bend right]  node[swap] {r $nc_{(i^-,+)}$} (q_{23})
+	(q_{20}) edge[bend left]  node {r $c_{(i^-,+)}$} (q_{24})
+	(q_{20}) edge[bend right]  node[swap] {r $nc_{(i^-,+)}$} (q_{24})
+	(q_{21}) edge[bend left]  node {r $c_{(i^-,+)}$} (q_{25})
+	(q_{21}) edge[bend right]  node[swap] {r $nc_{(i^-,+)}$} (q_{25})
+	(q_{22}) edge[bend left]  node {r $c_{(i^-,+)}$} (q_{26})
+	(q_{22}) edge[bend right]  node[swap] {r $nc_{(i^-,+)}$} (q_{26})
+      (q_{23}) edge  node {$c_x=xc_{(i^+,-)} \xor c_i$} (q_{27})
+      (q_{24}) edge  node {$c_x=xc_{(i^+,-)} \xor c_i$} (q_{28})
+      (q_{25}) edge  node {$c_x=xc_{(i^+,-)} \xor c_i$} (q_{29})
+      (q_{26}) edge  node {$c_x=xc_{(i^+,-)} \xor c_i$} (q_{30})
+      (q_{27}) edge  node {s $c_x$} (q_{31})
+       (q_{28}) edge  node {s $c_x$} (q_{32})
+       (q_{29}) edge  node {s $c_x$} (q_{33})
+       (q_{30}) edge  node {s $c_x$} (q_{34})
+       (q_{31}) edge  node {r $c_y=xc_{(({i^+}^+),-)} \xor xc_{i^+}$} (q_{35})
+       (q_{32}) edge  node {r $c_y=xc_{(({i^+}^+),-)} \xor xc_{i^+}$} (q_{36})
+       (q_{33}) edge  node {r $c_y=xc_{(({i^+}^+),-)} \xor xc_{i^+}$} (q_{37})
+       (q_{34}) edge  node {r $c_y=xc_{(({i^+}^+),-)} \xor xc_{i^+}$} (q_{38})
+       (q_{35}) edge  node {$p=xc_{(i^-,+)} \xor c_y \xor c_i$} (q_{39})
+       (q_{36}) edge  node {$p=xc_{(i^-,+)} \xor c_y \xor c_i$} (q_{40})
+       (q_{37}) edge  node {$p=xc_{(i^-,+)} \xor c_y \xor nc_i$} (q_{41})
+       (q_{38}) edge  node {$p=xc_{(i^-,+)} \xor c_y \xor nc_i$} (q_{42});
+
+	\end{tikzpicture}
+	\end{adjustbox}
+	\caption{Altruistic player in probabilistic secret sharing}\label{fig:altruistic}
+\end{figure*}
+
+\paragraph{Without Byzantine}
+Similarly, we show that in each of the above classes, the expected pay-off of any altruistic play is $0$. For example, in the first class -- unique winner and the winner plays $0$, there are $3$ cases: $p_1$ wins, $p_2$ wins, or $p_3$ wins. An altruistic player $p_1$'s pay-offs are $2$, $-1$ and $-1$ respectively. In this class the probability of each outcome is the same. Thus, the expected pay-off of $p_1$ is $0$. Similarly, other players' pay-offs are $0$ in the first class as well. The expected pay-offs of any altruistic player is $0$ in other classes. Therefore,  considering all the classes, the expected pay-off of any altruistic player is $0$. %altruistic player's expected pay-off is $\frac{1}{5} \times \frac{3}{5} \times \frac{3}{5} = \frac{9}{125}$. The probability weighted outcome is $\frac{9}{125} \times (2 + -1 + -1)=0$.
+%So, $U_1(\langle s_1^a,s_1^b,s_1^a  \rangle )=0$ in this scenario. 
+
+Next, we calculate the expected pay-off of a rational player using a similar way as in the equal probability strategy. 
+Assuming $p_1$ is rational, given that $p_1$ plays rock, there are $9$ outcomes. The pay-off of each outcome is shown in Table~\ref{tab:1}. However, the probability of each outcome is unequal. We calculate the probabilities for each outcome and obtain the expected pay-off of $p_1$ is $0.8$, and calculate the probability of restarting the game as $\frac{86}{125}$. Hence, for each iteration, the expected pay-off of $p_1$ is no less than $0.8$. If any other action of $p_1$ leads to a pay-off less than $0.8$, $p_1$ will play rock instead of the action for achieving better pay-off. Hence, the expected pay-off of $p_1$ in each iteration is no less than $0.8$. For infinite number of iterations, the expected pay-off 
+of $p_1$ is obviously larger than $0$. This implies that $V_1(\langle s_1^r,s_1^a,s_1^a  \rangle ) > U_1(\langle s_1^a,s_1^a,s_1^a  \rangle )$. Therefore, the strategy $\langle \frac{1}{5},\frac{1}{5},\frac{3}{5} \rangle$ is NOT a Nash-equilibrium, when there is no Byzantine player.
+
+\paragraph{With one Byzantine player}
+Assume player $p_1$ is Byzantine, unlike the case with equal probability strategy,
+the unequal probability strategy provides interesting and counter-intuitive scenarios.
+We cannot simply consider one iteration and derive the Nash-equilibrium by extending it to multiple iterations.
+Essentially, the probability of ending the game plays more important role in the calculation. An action of rational player which leads to bigger pay-off than other actions in one iteration may not always lead to a bigger pay-off in the long run, in the case that the action leads to a significant larger probability to restart the game. For example, in the case that the pay-off is negative, if player's pay-off in the long run is smaller than the pay-off in one iteration then the action that has smaller pay-off in one iteration has larger pay-off in the long run.\\
+In the algorithm, $U_i(\langle s_1^b,s_1^a,s_1^a  \rangle,iter)$ was approximately equal to $\frac{-10}{11}$ when $p_2$ is altruistic and $V_i(\langle s_1^b,s_1^r,s_1^a \rangle,iter)$ was approximately equal to $\frac{-5}{3}$ when $p_2$ was rational. The algorithm terminated by returning the result $PASS$. It shows that the strategy  $\langle \frac{1}{5},\frac{1}{5},\frac{3}{5} \rangle$ is a Nash-equilibrium, when $p_1$ is Byzantine. Due to space limitations we do not present the proofs in the paper. Please refer to \cite{Full-version} for proofs.
+%A rational player determines her optimal action for the first game, given the optimum cumulative expected pay-off obtained in  subsequent games. Across the iterations of the algorithm, number of these subsequent games is increased. Since 
+
+
+%For example,
+
+%Assume player $p_1$ is Byzantine, we calculate altruistic player $p_2$'s expected pay-off for a single iteration. Given Byzantine player plays rock, the expected pay-off of $p_2$ is $-0.4$. Similarly, we calculate the pay-off of $p_2$ when $p_1$ plays the other two actions. This is the minimum expected pay-off achieved by player $1$ within a single iteration.Restarting probability is $\frac{14}{25}$. Long-term expected pay-off is $U_1(\langle s_1^a,s_1^b,s_1^a  \rangle )=\frac{-10}{11}$. \\
+%When the player $2$ is Byzantine and player $1$ is rational, It can be shown that for the moves $R$ , $P$ and $S$ by player $1$, corresponding Byzantine moves are $P$, $S$ and $R$. The player $1$'s maximum expected pay-off for a single iteration is $\frac{-3}{5}$ and it happens when player $1$ plays $R$. For this strategy of player $1$ and player $2$, probability of restarting is $\frac{4}{5}$. However, there is an interesting fact arising here. The player $1$'s best strategy in a single iteration may not give the maximum guaranteed expected pay off in the long run because, the restarting probabilities are different for each strategy. Lower expected pay-off in a single iteration may produce a higher long-term expected pay-off due to a sufficiently low restarting probability. In this scenario, Strategy $S$ by player $1$ gives the maximum long-term guaranteed expected pay-off $-1 \times \frac{1}{1 - \frac{2}{2}}=\frac{-5}{3}$. Since, $\frac{-10}{11} \geq \frac{-5}{3}$\\
+%$U_1(\langle s_1^a,s_1^b,s_1^a  \rangle ) \geq V_1(\langle s_1^r,s_1^b,s_1^a  \rangle ) $. Hence, this constitutes a Nash-equilibrium.
+
+%$C ^ \sharp$ Implementation was able to calculate the approximated long-term utility values allowing error not more than $10^{-4}$.
+
+\subsection{Probabilistic secret sharing}
+Secret sharing is a way for a group of users to share a secret: the secret is divided into many parts, named \emph{shares}, and each user in the group has a share; the secret can only be reconstructed with a sufficient number (threshold $m$) of shares. In other words, the secret is kept confidential, even in the presence of a limited number of traitors (compromised users or non-cooperating members who prevent the reconstruction of the secret). This property makes secret sharing an ideal scheme for storing highly sensitive information, such as encryption keys and launch codes. In the parametric form, a $n\mbox{-}m$ ($n\geq m$) secret sharing ensures that it requires at least $m$ altruistic players to reconstruct the secret within a group of $n$ players. That is, less than $m$ compromised players together cannot reconstruct the secret; and less than $n-m$ non-cooperating members together cannot stop the altruistic players from reconstructing the secret.
+
+The most well-known secret sharing scheme is the Shamir's secret sharing~\cite{Shamir79}. However, the scheme does not work when the players are rational. It is shown that a rational player will not share her secret with anyone else ~\cite{HT04}. In fact, it is proved that in general, in all practical mechanisms for shared-secret reconstruction with an upper bound on the running time, the best strategy for each rational player is to deviate from the specification by doing nothing~\cite{HT04}. Hence, a randomized mechanism (the probabilistic secret sharing scheme) is proposed to ensure that rational players would reveal their shares to reconstruct the secret, i.e., achieving a Nash-equilibrium with a constant expected running time. 
+
+\subsubsection{Protocol description}
+The probabilistic scheme is a $3\mbox{-}3$ secret sharing. 
+Given the $3$ players, we index each player with a distinct number in $\{1, 2, 3\}$. We use $i$ to denote one player, then the other two players are $(i+1)\%3$, denoted as $i^+$, and $(i-1)\%3$, denoted as $i^-$. There is an issuer who assigns each player a share of secret. Assuming the share cannot be changed; for example, it is signed by the issuer.
+The scheme works as follows.
+\begin{enumerate}
+\item Each player $i$
+\begin{itemize}
+\item chooses a bit $c_i$ ($c_i$ can only be $1$ or $0$) such that $c_i =1$ with probability $\alpha$ and $c_i = 0$ with probability $1-\alpha$; 
+\item chooses a bit $c_{(i,+)}$ ($c_{(i,+)}$ can only be $1$ or $0$) randomly, so that $c_{(i,+)}=1$ with probability $1/2$ and $c_{(i,+)}=0$ with probability $1/2$;
+\item calculates $c_{(i,-)}= c_i \xor c_{(i,+)}$. 
+\end{itemize}
+Then player $i$ sends the bit $c_{(i,+)}$ to player $i^+$ and sends the bit $c_{(i,-)}$ to player $i^-$. This means that the player $i$ receives a bit $c_{(i^+,-)}$ from player $i^+$ and a bit $c_{(i^-,+)}$ from player $i^-$.
+\item On receiving $c_{(i^+,-)}$, player $i$ computes $c_{(i^+,-)} \xor c_i$ and sends it to player $i^-$. Correspondingly, $i$ receives $c_{((i^+)^+, -)} \xor\ c_{i^+}$ from $i^+$. Since there are only $3$ players, player $(i^+)^+$ is the player $i^-$. Hence $c_{((i^+)^+, -)} \xor c_{i^+}=c_{(i^-,-)} \xor c_{i^+}$.
+\item When receiving both $c_{(i^-,+)}$ from player $i^-$ (step 1) and receiving $c_{(i^-,-)} \xor c_{i^+}$ from $i^+$ (step 2), $i$ computes $p = c_{(i^-,+)} \xor (c_{(i^-,-)}\xor c_{i^+})\xor c_i$. Note that $ c_{(i^-,+)} \xor (c_{(i^-,-)}\xor c_{i^+})\xor c_i=c_{i^-} \xor c_{i^+}\xor c_i$, i.e., $p=c_1 \xor c_2 \xor c_3$ (It holds for all players).
+If $p = c_i = 1$ then player $i$ sends her share to the others.
+\item Depending on the value of $p$ and the shares received, player $i$ constructs the secret, restarts the protocol or reports cheating.
+\begin{itemize}
+\item If $p=1$, $i$ receives $3$ shares, then he construct the secret.
+\item If $p =0$ and $i$ received no secret shares, or if $p =1$ and $i$ received exactly one share (possibly from itself; that is, we allow the case that $i$ did not receive any shares from other players but sent its own), the issuer restarts the protocol. 
+\item Otherwise, player $i$ stops the protocol. Because someone must have been cheating. 
+\end{itemize}
+The intuition behind the last step is as follows: When $p=0$, no one should send her share; and thus $i$ receives no secret share. Otherwise, someone calculated wrong (cheating).
+When $p=1$ either $c_i=c_{i^+}=c_{i^-}=1$ or there exists exactly one player chooses $1$, i.e., $c_i=c_{i^+}=0$ and $c_{i^-}=1$, $c_i=c_{i^-}=0$ and $c_{i^+}=1$, or $c_{i^+}=c_{i^-}=0$ and $c_i=1$. 
+In the former case, each player can construct the secret. In the later case, $i$ should receive exactly one share then the issuer restarts the protocol. Otherwise, some player calculated wrong (cheating). 
+\end{enumerate}
+
+
+\subsubsection{Modelling}
+The model of the altruistic players who follow the protocol specification is straightforward.
+For the sake of space saving, we present the FMS for altruistic players in the graphical manner as
+in Figure~\ref{fig:altruistic}. In the Figure, we use `s' to stand for sending and `r' to stand for receiving,
+use $nc_i$ to represent the opposite value of $c_i$; the value after symbol $|$ is the probability of the action, for example, $c_i|\alpha$ stands for that the probability of choosing the value $c_i$ is $\alpha$. For simplicity of presentation, we merged the states and traces caused by
+received values and use the prefix $xc$ to represent either $c$ or $nc$ depending on which one is received.
+The payoff function is defined as follows: \\
+$\shia(\gs)=\left\{\begin{array}{ll}
+3 & \mbox{if only the player \textit{i} gets secret}\\
+2 &\mbox{if the player \textit{i} and another player get secret}\\
+1 &\mbox{if everyone knows the secret}\\
+0 &\mbox{if no one knows the secret}\\
+-1 & \mbox{if other two players know the secret} \\
+-2 & \mbox{if only one other player knows the secret} 
+\end{array}\right. $
+%
+The Byzantine players deviate from the protocol specification by sending the opposite 
+value of the one that the player should send. For example, in a Byzantine player's model,
+we add a transition from $q_7$ to $q'_{11}$ labelled with $nc_{(i,+)}$, and copy the transition
+from $q_{11}$ to $q_{39}$ as $q'_{11}$ to $q'_{39}$. Similar for other states which enables
+sending actions. Due to space limit, we omit the figure for Byzantine players.
+The model of rational players are the model of Byzantine players together with the above pay-off function.
+
+Notice that we fixed the order of all players' sending and receiving actions such that 
+the three players' sending and receiving actions can be synchronised. That is, we
+did not model the full interleaving of all the possible 
+orders of sending and receiving actions of the three players. We show that this does
+not influence the verification result.
+
+\subsubsection{Verification results}
+We verified whether a player deviates from the specification in two settings: without Byzantine player and
+with one Byzantine player. 
+Essentially, our algorithm calculates the pay-off of a player in the following four configurations and compare the pay-offs.
+\begin{enumerate}
+	\item All the three players are altruistic ($m=0$)
+	\item Two players are altruistic and one player is rational ($m=0$)
+	\item Two players are altruistic and one player is Byzantine ($m=1$)
+	\item One player is altruistic, one player is Byzantine and one player is rational ($m=1$)
+\end{enumerate}
+The verification result shows that the probabilistic secret sharing protocol is a Nash-equilibrium when there is no Byzantine player,
+which confirms the manual analysis in its original paper. In addition, the verification
+result shows that even with a Byzantine player, the probabilistic secret sharing scheme is 
+still a Nash-equilibrium, which has not been proved in existing works.
+
+
