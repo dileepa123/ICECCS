@@ -194,7 +194,7 @@ In detail, to calculate $V_i$, we first compute a set of possible expected pay-o
 		\IF{!perfect}
 		\IF{$\forall i \in Al$, $\forall init \in I_i$. $Vl_i(\mi{init},\mi{iter}) \le Ul_i(\mi{init},\mi{iter}) \wedge Ul_i(\mi{init},\mi{iter}) - Vl_i(\mi{init},\mi{iter}) \ge \mi{max}_{\mi{Aerror}}$ }
 		\RETURN $\mi{PASS}$
-		\ELSIF{$\forall i \in Al$,$\forall init \in I_i$.$Vl_i(\mi{init},\mi{iter}) > Ul_i(\mi{init},\mi{iter}) \wedge Vl_i(\mi{init},\mi{iter}) - Ul_i(\mi{init},\mi{iter}) > \mi{max}_{\mi{Aerror}}$}
+		\ELSIF{$\exists i \in Al$,$\forall init \in I_i$.$Vl_i(\mi{init},\mi{iter}) > Ul_i(\mi{init},\mi{iter}) \wedge Vl_i(\mi{init},\mi{iter}) - Ul_i(\mi{init},\mi{iter}) > \mi{max}_{\mi{Aerror}}$}
 		\RETURN $\mi{FAIL}$
 		\ENDIF
 		\ENDIF
@@ -202,7 +202,7 @@ In detail, to calculate $V_i$, we first compute a set of possible expected pay-o
 		\IF{$\forall i \in Al$, $\forall \mi{init} \in I$. $V_i(\mi{init},\mi{iter}) \le U_i(\mi{init},\mi{iter})
 			\wedge U_i(\mi{init},\mi{iter}) - V_i(\mi{init},\mi{iter}) \ge \mi{max}_{\mi{Serror}}$}
 		\RETURN $\mi{PASS}$
-		\ELSIF{$\forall i \in Al$, $\forall \mi{init} \in I$. $V_i(\mi{init},\mi{iter}) > U_i(\mi{init},\mi{iter})
+		\ELSIF{$\exists i \in Al$, $\forall \mi{init} \in I$. $V_i(\mi{init},\mi{iter}) > U_i(\mi{init},\mi{iter})
 			\wedge V_i(\mi{init},\mi{iter}) - U_i(\mi{init},\mi{iter}) > \mi{max}_{\mi{Serror}}$}
 		\RETURN $\mi{FAIL}$
 		\ENDIF
