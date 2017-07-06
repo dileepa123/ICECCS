@@ -1,0 +1,303 @@
+
+\renewcommand{\thesection}{\Alph{section}}%
+
+\section{Proofs}\label{apdx}
+
+\setcounter{theorem}{0}
+\setcounter{proposition}{0}
+\setcounter{lemma}{0}
+%\appendix
+%\section{Proofs}
+%\label{apdx}
+
+In general, given a set of Byzantine players $Z \subset [n]$, a global state $s$, 
+%\in S_{|g}$ where $g=\langle g^1, \ldots, g^n\rangle$ with $g^i={\sf b}$ if $i\in Z$ and $g^i={\sf a}$ or $g^i={\sf r}$ if $i\notin Z$, 
+the pay-off of $i$ playing the game for $k$ steps should be as follows.
+\[
+\begin{array}{l}
+v_i^{'k}(Z,s)=\\
+\hspace{1.2cm} \left\{
+\begin{array}{l}
+{\bf \text{if } k > 0 \wedge i \notin Z}  \\
+max_{\pi'^{a}_{i} \in \Pi_{t=0}^{k-1} A_{i}}
+(min_{\pi'^{a}_{Z} \in \Pi_{t=0}^{k-1} A_{Z}}
+\{E_{\pi'^{a}_{[n]-Z-\{i\}} \in \Pi_{t=0}^{k-1} A_{[n]-Z-\{i\}}}\\ \hfill
+(\Sigma_{t=0}^{k-1} \beta_i^{t}H_{i}(\pi'^{s}(t),\pi'^{a}(t))) |\\ BT(Z\cup\{i\},\pi'^{s}(t),\pi'^{a}(t),\pi'^{s}(t+1)) \wedge \pi'^{s}(0)=s \wedge |\pi'|=k\})\\
+{\bf \text{if } k > 0 \wedge i \in Z} \\
+max_{\pi'^{a}_{i} \in \Pi_{t=0}^{k-1} A_{i}}
+min_{\pi'^{a}_{[Z]-\{i\}} \in \Pi_{t=0}^{k-1} A_{[Z]-\{i\}}}
+\{\{E_{\pi'^{a}_{[n]-Z} \in \Pi_{t=0}^{k-1} A_{[n]-Z}}\\ \hfill(\Sigma_{t=0}^{k-1} \beta_i^{t}H_{i}(\pi'^{s}(t),\pi'^{a}(t))) |\\ BT(Z,\pi'^{s}(t),\pi'^{a}(t),\pi'^{s}(t+1)) \wedge \pi'^{s}(0)=s \wedge |\pi'|=k\}\}\\
+{\bf \text{if } k = 0}  \\0
+\end{array}
+\right.
+\end{array}
+\]
+where $\pi'$ is a path of length $k$.
+
+In the case of $k > 0 \wedge i \notin Z$, $\pi'^{s}(t)$ is the state at position $t$ in the path $\pi'$
+and $\pi'^{a}(t)$ is the action at position $t$ in the path $\pi'$.
+Hence, $H_{i}(\pi'^{s}(t),\pi'^{a}(t))$ defines the pay-off of $i$ on the transition at position $t$.
+The pay-offs of length $k$ is the sum of each position, with every pay-off weighted with discount factor $\beta_i^t$, i.e., $\Sigma_{t=0}^{k-1} \beta_i^{t}H_{i}(\pi'^{s}(t),\pi'^{a}(t))$. Note that given a choice, we have a tree, containing a set of paths.
+For each path in the tree, calculation of the pay-off of the path is as above. 
+The expected pay-off of the tree can be calculated using these pay-offs, by considering the probabilities in each path.
+This process is denoted by $E_{\pi'^{a}_{[n]-Z-\{i\}} \in \Pi_{t=0}^{k-1} A_{[n]-Z-\{i\}}}$.
+The possible trees are grouped by the rational players' choices of non-deterministic actions, i.e., for one choice, there are a set of trees due to that there
+may be different choices for Byzantine players. For each set/group of trees,
+we choose the tree that minimised the expected pay-off, denoted by $min_{\pi'^{a}_{Z} \in \Pi_{t=0}^{k-1} A_{Z}}$,
+because we assume that the Byzantine players try to minimise $i$'s pay-offs.
+Now in each group (i.e., for a choice of the rational player), there is only the minimised tree,
+and each group has exactly one choice of non-deterministic actions of $i$.
+We choose the one which gives the maximum expected pay-off, denoted by $max_{\pi'^{a}_{i} \in \Pi_{t=0}^{k-1} A_{i}}$, meaning that the rational player $i$
+always makes the choice that gives the maximised pay-off. 
+In addition, we ensure that each transition in each path is valid ($BT(Z\cup\{i\},\pi'^{s}(t),\pi'^{a}(t),\pi'^{s}(t+1))$),
+the initial state of each path is $s$ and the length of each path is $k$. Hence, 
+in summary, the formula captures the intuitive calculate of $i$'s pay-off in length $k$ starting from $s$ w.r.t. $Z\cup\{i\}$.
+
+If $k > 0 \wedge i \in Z$, since $i\in Z$, the set of altruistic and Byzantine players
+differ from the set of altruistic and Byzantine players in the case of $i\notin Z$, that is,
+in the case of $i\notin Z$, $i$ can be altruistic or rational, whereas in the case of $i\in Z$,
+$i$ can be Byzantine or rational. Hence, the grouping of trees due to the rational players' choices
+is different in these two cases. Therefore, in the case of $i\in Z$, the process of calculating the
+expected pay-off of trees is denoted differently as $E_{\pi'^{a}_{[n]-Z} \in \Pi_{t=0}^{k-1} A_{[n]-Z}}$.
+The second difference is in the $BT$ functions. Since $i\in Z$, we do not need to additionally add $i$ to $Z$ to
+capture the rational behaviour of $i$. 
+If $k=0$, we initialise the pay-off as $0$.
+
+Similarly, we define the correct pay-off for $u_i^{'k}(Z,s)$ as follows:
+%
+%\[
+%\begin{array}{l}
+%v_i^{'k}(Z,s)=\\
+%\hspace{1.2cm} \left\{
+%\begin{array}{l}
+%{\bf \text{if } k > 0 \wedge i \notin Z}  \\
+%max_{\pi'^{a}_{i} \in \Pi_{t=0}^{k-1} A_{i}}
+%(min_{\pi'^{a}_{Z} \in \Pi_{t=0}^{k-1} A_{Z}}
+%\{E_{\pi'^{a}_{[n]-Z-\{i\}} \in \Pi_{t=0}^{k-1} A_{[n]-Z-\{i\}}}\\ \hfill
+%(\Sigma_{t=0}^{k-1} \beta_i^{t}H_{i}(\pi'^{s}(t),\pi'^{a}(t))) |\\ BT(Z\cup\{i\},\pi'^{s}(t),\pi'^{a}(t),\pi'^{s}(t+1)) \wedge \pi'^{s}(0)=s \wedge |\pi'|=k\})\\
+%{\bf \text{if } k > 0 \wedge i \in Z} \\
+%max_{\pi'^{a}_{i} \in \Pi_{t=0}^{k-1} A_{i}}
+%min_{\pi'^{a}_{[Z]-\{i\}} \in \Pi_{t=0}^{k-1} A_{[Z]-\{i\}}}
+%\{\{E_{\pi'^{a}_{[n]-Z} \in \Pi_{t=0}^{k-1} A_{[n]-Z}}\\ \hfill(\Sigma_{t=0}^{k-1} \beta_i^{t}H_{i}(\pi'^{s}(t),\pi'^{a}(t))) |\\ BT(Z,\pi'^{s}(t),\pi'^{a}(t),\pi'^{s}(t+1)) \wedge \pi'^{s}(0)=s \wedge |\pi'|=k\}\}\\
+%{\bf \text{if } k = 0}  \\0
+%\end{array}
+%\right.
+%\end{array}
+%\]
+%
+\[
+\begin{array}{l}
+u_{i}^{'k}(Z,s)=
+\left\{
+\begin{array}{l}
+{\bf \text{if } k > 0 \wedge i \notin Z}  \\
+E_{a_i \in A_i} \big(
+min _{a_{Z} \in A_{Z}}\{
+\\E_{a_{[n]-Z-\{i\}} \in A_{a_{[n]-Z-\{i\}}}} (\Sigma_{t=0}^{k-1} \beta_i^{t}H_{i}(\pi'^{s}(t),\pi'^{a}(t))) |\\ BT(Z,\pi'^{s}(t),\pi'^{a}(t),\pi'^{s}(t+1)) \wedge \pi'^{s}(0)=s \wedge |\pi'|=k\})\\
+{\bf \text{if } k > 0 \wedge i \in Z} \\
+min _{a_i \in A_i} \{
+min_{a_{Z-\{i\}} \in A_{Z-\{i\}}}\{
+\\E_{a_{[n]-Z} \in A_{[n]-Z}} (\Sigma_{t=0}^{k-1} \beta_i^{t}H_{i}(\pi'^{s}(t),\pi'^{a}(t))) |\\ BT(Z,\pi'^{s}(t),\pi'^{a}(t),\pi'^{s}(t+1)) \wedge \pi'^{s}(0)=s \wedge |\pi'|=k\})\\
+\end{array}
+\right.
+\end{array}
+\]
+
+\subsection{Correctness of the dynamic programming definition}
+%Since we have probabilistic strategies we do not always consider paths. We consider a set of paths to which probabilities are assigned. We optimize the expected value of these paths. Let $\pi'^a$ be a path of length $k$, $Z \subset [n]$  is the Byzantine player set and $s \in S_{z}$ a global state. The original value function for a horizon $t$ is given by:
+%%$v_i^{k}(Z,s)=\max_{\sigma \in Strat_{k}(s,Z,i)}$\\
+%%$\{\min_{\pi \in Path(s,Z,i,\sigma)}E_{\Pi_{t=0}^{k-1}A_{[n]-Z}(\pi^(s)(t))}(\Sigma_{t=0}^{k-1} \beta_i^{t}h_{i}(\pi^{s}(t),\pi^{s}(a)))\}$ \newline
+%
+%%$v_i^{k}(Z,s)= max_{\sigma \in Strat_{k}(s,Z,i)}\{min_{}  \} $
+%%$v_i^{k}(Z,s)=E_{\pi'^{a} \in \Pi_{t=0}^{k-1} A_{[n]-Z}}(\Sigma_{t=0}^{k-1} \beta_i^{t}h_{i}(\pi'^{s}(t),\pi'^{a}(t)))$
+%
+\[
+\begin{array}{l}
+v_i^{'k}(Z,s)=\\
+\hspace{1.2cm} \left\{
+\begin{array}{l}
+{\bf \text{if } k > 0 \wedge i \in Z} \\
+max_{\pi'^{a}_{i} \in \Pi_{t=0}^{k-1} A_{i}}
+min_{\pi'^{a}_{[Z]-\{i\}} \in \Pi_{t=0}^{k-1} A_{[Z]-\{i\}}}
+\{\{E_{\pi'^{a}_{[n]-Z} \in \Pi_{t=0}^{k-1} A_{[n]-Z}}\\ \hfill(\Sigma_{t=0}^{k-1} \beta_i^{t}h_{i}(\pi'^{s}(t),\pi'^{a}(t))) |\\ BT(Z,\pi'^{s}(t),\pi'^{a}(t),\pi'^{s}(t+1)) \wedge \pi'^{s}(0)=s \wedge |\pi'|=k\}\}\\
+{\bf \text{if } k > 0 \wedge i \notin Z}  \\
+E_{\pi'^{a}_{i} \in \Pi_{t=0}^{k-1} A_{i}}
+(min_{\pi'^{a}_{Z} \in \Pi_{t=0}^{k-1} A_{Z}}
+\{E_{\pi'^{a}_{[n]-Z-\{i\}} \in \Pi_{t=0}^{k-1} A_{[n]-Z-\{i\}}}\\ \hfill
+(\Sigma_{t=0}^{k-1} \beta_i^{t}h_{i}(\pi'^{s}(t),\pi'^{a}(t))) |\\ BT(Z,\pi'^{s}(t),\pi'^{a}(t),\pi'^{s}(t+1)) \wedge \pi'^{s}(0)=s \wedge |\pi'|=k\})\\
+{\bf \text{if } k = 0}  \\0
+\end{array}
+\right.
+\end{array}
+\]
+
+%We can use induction to prove that the dynamic programming definition of $v_i^{k}(Z,s)$ also computes the same function. Induction is done on the path length $t$ \cite{MMS08}.
+For recall,
+
+\begin{theorem}
+	$v_i^{'k}(Z,s)=v_i^{k}(Z,s)$ and $u_i^{'k}(Z,s)=u_i^{k}(Z,s)$, $ \forall k \ge 0 $.
+\end{theorem}
+
+\begin{proof}
+	For $k=0$, the result is trivial because value of empty path is defined to be $0$. So the maximin path value is 0.
+	Substitute the original function value $v_i^{'k}(Z,s)$ to compute $v_i^{k+1}(Z,s)$ in the dynamic programming definition. 
+	Let $i \in Z$, 
+	%let the new path set be $\{\pi'\}$ and the 
+	any path of length $k$  th iteration be $\pi$ and let $\{\pi\}$ be any infinite length probabilistic path starting from state $s$.
+	%	$k$ corresponds to a length of $k+1$. $(k \geq 0)$
+	%	$E_{A_{[n]-Z}(s)}(h(s,<a_i,a_{-i}>)+\beta_iv_i^{k}(Z,s'))=$\\
+	%	$E_{A_{[n]-Z}(s)}(h(s,<a_i,a_{-i}>)+\beta_iE_{\pi^{a} \in \Pi_{t=0}^k A_{[n]-Z}}(\Sigma_{t=0}^{k} \beta_i^{t}h_{i}(\pi^{s}(t),\pi^{a}(t))))$\\
+	%	$E_{A_{[n]-Z}(s)}(h(s,<a_i,a_{-i}>)) +$
+	%	$ E_{A_{[n]-Z}(s)}(E_{\pi'^{a} \in \Pi_{t=1}^{k+1}A_{[n]-Z}}(\Sigma_{t=1}^{k+1} \beta_i^{t}h_{i}(\pi'^{s}(t),\pi'^{a}(t))))$\\
+	%	$E_{\pi'^{a} \in \Pi_{t=0}^{k+1}A_{[n]-Z}}(h(s,<a_i,a_{-i}>)) +$
+	%	$ E_{\pi'^{a} \in \Pi_{t=0}^{k+1} A_{[n]-Z}}(\Sigma_{t=1}^{k+1} \beta_i^{t}h_{i}(\pi'^{s}(t),\pi'^{a}(t)))$\\
+	%	$E_{\pi'^{a} \in \Pi_{t=0}^{k+1} A_{[n]-Z}}(\Sigma_{t=0}^{k+1} \beta_i^{t}h_{i}(\pi'^{s}(t),\pi'^{a}(t)))$\\
+	
+%	\begin{equation}
+%	\begin{split}
+%	E_{a_{[n]-Z} \in A_{[n]-Z}}(h(s,\langle a_i,a_{-i} \rangle)+\beta_iv_i^{k}(Z,s')|BT(Z,s,\langle a_i,a_{-i} \rangle,s'))
+%	\\
+%	=E_{a_{[n]-Z} \in A_{[n]-Z}}(h(s,\langle a_i,a_{-i} \rangle)+\beta_iE_{\pi^{a} \in \Pi_{t=0}^{k-1} A_{[n]-Z}}(\Sigma_{t=0}^{k-1} \beta_i^{t}h_{i}(\pi^{s}(t),\pi^{a}(t))|BT(Z,s,\langle a_i,a_{-i} \rangle,s')))\\
+%	=E_{a_{[n]-Z} \in A_{[n]-Z}}(h(s,\langle a_i,a_{-i} \rangle)) +
+%	E_{A_{[n]-Z}}(E_{\pi'^{a} \in \Pi_{t=1}^{k}A_{[n]-Z}}(\Sigma_{t=1}^{k} \beta_i^{t}h_{i}(\pi'^{s}(t),\pi'^{a}(t))|BT(Z,s,\langle a_i,a_{-i} \rangle,s')))\\
+%	=E_{\pi'^{a} \in \Pi_{t=0}^{k}A_{[n]-Z}}(h(s,\langle a_i,a_{-i} \rangle)) +
+%	E_{\pi'^{a} \in \Pi_{t=0}^{k} A_{[n]-Z}}(\Sigma_{t=1}^{k} \beta_i^{t}h_{i}(\pi'^{s}(t),\pi'^{a}(t))|BT(Z,s,\langle a_i,a_{-i} \rangle,s'))\\
+%	=E_{\pi'^{a} \in \Pi_{t=0}^{k} A_{[n]-Z}}(\Sigma_{t=0}^{k} \beta_i^{t}h_{i}(\pi'^{s}(t),\pi'^{a}(t))|BT(Z,s,\langle a_i,a_{-i} \rangle,s'))\\
+%	\end{split}
+%	\end{equation}
+
+	\begin{equation}
+	\begin{split}
+	&E_{a_{[n]-Z} \in A_{[n]-Z}}(h(s,\langle a_i,a_{-i} \rangle) +\beta_iv_i^{k}(Z,s')|BT(Z,s,\langle a_i,a_{-i} \rangle,s')) \\
+& = E_{a_{[n]-Z} \in A_{[n]-Z}}(h(s,\langle a_i,a_{-i} \rangle)+\beta_iE_{\pi^{a} \in \Pi_{t=0}^{k-1} A_{[n]-Z}}(\Sigma_{t=0}^{k-1} \beta_i^{t}h_{i}(\pi^{s}(t),\pi^{a}(t))|\\ &\hspace{2cm} BT(Z,s,\langle a_i,a_{-i} \rangle,s')))\\
+& =E_{a_{[n]-Z} \in A_{[n]-Z}}(h(s,\langle a_i,a_{-i} \rangle)) +
+	E_{A_{[n]-Z}}(E_{\pi'^{a} \in \Pi_{t=1}^{k}A_{[n]-Z}}(\\ &\hspace{2cm} \Sigma_{t=1}^{k} \beta_i^{t}h_{i}(\pi'^{s}(t),\pi'^{a}(t))|BT(Z,s,\langle a_i,a_{-i} \rangle,s')))\\
+& =E_{\pi'^{a} \in \Pi_{t=0}^{k}A_{[n]-Z}}(h(s,\langle a_i,a_{-i} \rangle)) +
+	E_{\pi'^{a} \in \Pi_{t=0}^{k} A_{[n]-Z}}(\Sigma_{t=1}^{k} \beta_i^{t}h_{i}(\pi'^{s}(t),\pi'^{a}(t))|\\ &\hspace{2cm} BT(Z,s,\langle a_i,a_{-i} \rangle,s'))\\
+& =E_{\pi'^{a} \in \Pi_{t=0}^{k} A_{[n]-Z}}(\Sigma_{t=0}^{k} \beta_i^{t}h_{i}(\pi'^{s}(t),\pi'^{a}(t))|BT(Z,s,\langle a_i,a_{-i} \rangle,s'))
+	\end{split}
+	\end{equation}	
+	
+The maximin value would be:
+	\begin{multline}
+	v_i'k(Z,s) = max_{\pi'^{a}_{i} \in \Pi_{t=0}^{k} A_{i}}
+	min_{\pi'^{a}_{[Z]-\{i\}} \in \Pi_{t=0}^{k} A_{[Z]-\{i\}}}\\
+	E_{\pi'^{a} \in \Pi_{t=0}^{k} A_{[n]-Z}}(\Sigma_{t=0}^{k} \beta_i^{t}h_{i}(\pi'^{s}(t),\pi'^{a}(t))|BT(Z,s,\langle a_i,a_{-i} \rangle,s'))
+	\end{multline}
+	
+	When $\{\pi\}$ is the path set corresponding to optimal expected value for length $k$,   $\{\pi'\}$ would be the path set $s\langle a_i,a_{-i}\rangle \pi \in \Pi_{t=0}^{k} A_{[n]-Z}$. Suppose we choose a different path set from $s'$ other than $v_i^k(s',Z)$ if does not correspond to the maximum expected value over player $i$ among the guaranteed values, we can miss a max value path set in general. The proof is similar for $u_i^k(Z,s)$.  %\qed
+\end{proof}
+
+\subsection{Correctness of Arbitrary Precision Nash Equilibria Verification\cite{MMS08}}
+ 
+\paragraph{Proposition \ref{prop:limkvu}} Though this result is not directly used in the proof of Theorem \ref{thm:correctness}, we take advantage of this subsection to explain how one can prove it. Indeed, Proposition \ref{prop:limkvu} relies on the same Lemmas than the ones used for the proof of Theorem \ref{thm:correctness}.
+For recall,
+\begin{proposition}\label{prop:limkvu}
+	\begin{enumerate}
+		\item $\lim_{k\to\infty} v_i^{k}(Z,s)=v_i(Z,s)$
+		\item $\lim_{k\to\infty} u_i^{k}(Z,s)=u_i(Z,s)$
+	\end{enumerate}
+\end{proposition}
+\begin{lemma}\label{lem:limvkpi}
+	\begin{enumerate}
+		\item $\forall k\in \mathbb{N}, |v_i(\{\pi\})-v_i(\{\pi|_k\})|$ $\le$ $e_i(k)$.	
+		\item $\lim_{k\to\infty}  v_i(\{\pi|_k\})=v_i(\{\pi\})$.
+	\end{enumerate}
+\end{lemma}
+\begin{lemma}\label{lem:vdiff}
+	Let $\{ \pi \}$ be a probabilistic path set s.t. $v_i(\{\pi\})$ is minimum in ${\sf Path}(s,Z,i,\sigma)$, let $\{\{\bar\pi_k \} \}_{k \in \mathbb{N}}$ be a sequence of finite path, s.t. $\forall k$, $v_i(\{\bar\pi_k   \})$ is minimum in ${\sf Path}_k(s,Z,i,\sigma)$, then $v_i(\{\pi|_k\})-v_i(\{\bar\pi_k\}) \le 2e_i(k)$.
+\end{lemma}
+\begin{lemma}\label{lem:limvkz}
+	$\forall s\in S$ and strategy $\sigma$ we have:\\
+	$\lim_{k\to\infty} v_i^{k}(Z,s,\sigma|_k) = v_i(Z,s,\sigma) $.
+\end{lemma}
+\begin{lemma}\label{lem:vkvdiff}
+	$\forall  s\in S$ and $\forall k \in \mathbb{N}$, we have:\\
+	$|v_i^{k}(Z,s)-v_i(Z,s)| < E_i(k)$.
+\end{lemma}
+\begin{lemma}\label{lem:ukudiff}
+	$\forall s\in S$ and $\forall k \in \mathbb{N}$, we have: \\
+	$|u_i^{k}(Z,s) - u_i(Z,s)| < E_i(k)$.
+\end{lemma}
+As written in the paper, apart Lemma \ref{lem:limvkpi}, Lemmas \ref{lem:vdiff} to \ref{lem:ukudiff}, as well as the proposition, are very similar from the results established in \cite{MariPhD}. For that reason, we do not reproduce their proof here and we refer to the text and \cite{MariPhD} for more details. Proof of Lemma \ref{lem:limvkpi} is given below.
+
+We now present the proof of Theorem \ref{thm:correctness}. For recall,
+\begin{theorem}%\label{thm:correctness}
+	Let $\mathcal{G}=(S, s_0, A, T, P, H, \beta)$ be an $n$ player game, $ \epsilon > 0$ and $\delta > 0$ and $Z \subset [n]$ be the set of Byzantine players, for each player $i \in [n]$ let 
+	\begin{enumerate}
+		\item $M_i$ = $max \{|h_i(s,a)| | s \in S$ and $a \in A\}$
+		\item $E_i(k) = 5\beta_i^{k} \frac{M_i}{1-\beta_i}$
+		\item $\Delta_i(k)=max\{v_i^{k}(Z \cup \{i\},{\sf f}(s))- u_i^{k}(Z,s)|s\in O \}$
+		\item $\epsilon_1(i,k) = \Delta_i(k) - 2E_i(k)$
+		\item $\epsilon_2(i,k) = \Delta_i(k) + 2E_i(k)$,
+	\end{enumerate}
+	and let $k_i$ be the minimum numbers of steps such that $4E_i(k_i) < \delta$,
+	\begin{enumerate}
+		\item \text{if } $\forall i \in [n]$, $\epsilon \ge \epsilon_2(i,k_i) > 0$ then $\mathcal{M}_{|gz}$ is $\epsilon$-Nash-equilibrium,
+		\item \text{if } $\exists i \in [n]$, $0 < \epsilon \le \epsilon_1(i,k_i)$ then $\mathcal{M}_{|gz}$ is not $\epsilon$-Nash-equilibrium,
+		\item \text{if } $\forall i \in [n]$, $\epsilon_1(i,k_i) < \epsilon$ and $\exists j \in [n]$ s.t. $\epsilon < \epsilon_2(j,k_j)$ then $\mathcal{M}_{|gz}$ is $(\epsilon + \delta)$-Nash-equilibrium.
+	\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+In order to prove the convergence of the value function, we want to bound the value difference by a more convenient function. For that purpose, we define $e_i(k)=\beta_i^{k}\frac{M_i}{1-\beta_i}$ and prove Lemma \ref{lem:limvkpi}.
+\setcounter{lemma}{0}
+\begin{lemma}\label{lem:limvkpi}
+	\begin{enumerate}
+		\item $\forall k\in \mathbb{N}, |v_i(\{\pi\})-v_i(\{\pi|_k\})|$ $\le$ $e_i(k)$.	
+		\item $\lim_{k\to\infty}  v_i(\{\pi|_k\})=v_i(\{\pi\})$
+	\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+	%	Let $\pi''^{a}=<b,\pi'^{a}>$ , $b \in A$\newline
+	\begin{enumerate}
+		\item 	$|v_i(\{\pi|_T\})-v_i(\{\pi|_k\})| =$\\
+		$~~~~~| E_{\pi^{'a} \in \Pi_{t=0}^{k-1} A_{[n]-Z}}(\Sigma_{t=0}^{k-1} \beta_i^{t}h_{i}(\pi^{s}(t),\pi^{a}(t))) -$\\
+		$~~~~~~ E_{\pi''^{a} \in \Pi_{t=0}^{k-1} A_{[n]-Z} \Pi_{t=k}^{T} A_{[n]-Z}}(\Sigma_{t=0}^{T} \beta_i^{t}h_{i}(\pi''^{s}(t),\pi''^{a}(t)))|$\\
+		$=| E_{\pi''^{a} \in \Pi_{t=0}^{k-1} A_{[n]-Z} \Pi_{t=k}^{T} A_{[n]-Z}}(\Sigma_{t=0}^{k-1} \beta_i^{t}h_{i}(\pi^{s}(t),\pi^{a}(t)))-$\\
+		$~~~~~~ E_{\pi''^{a} \in \Pi_{t=0}^{k-1} A_{[n]-Z} \Pi_{t=k}^{T} A_{[n]-Z}}(\Sigma_{t=0}^{T} \beta_i^{t}h_{i}(\pi''^{s}(t),\pi''^{a}(t)))|$\\
+		$ =|E_{\pi''^{a} \in \Pi_{t=0}^{k-1} A_{[n]-Z} \Pi_{t=k}^{T} A_{[n]-Z}}(\Sigma_{t=k}^{T} \beta_i^{t}h_{i}(\pi''^{s}(t),\pi''^{a}(t)))|$\\
+		$\leq |\Sigma_{t=k}^{T} E_{\pi''^{a} \in \Pi_{t=0}^{k-1} A_{[n]-Z} \Pi_{t=k}^{T} A_{[n]-Z}}( \beta_i^{t}h_{i}(\pi''^{s}(t),\pi''^{a}(t)))| $ (Linearity of Expectation)\\
+		$\leq \Sigma_{t=k}^{T}| E_{\pi''^{a} \in \Pi_{t=0}^{k-1} A_{[n]-Z} \Pi_{t=k}^{T} A_{[n]-Z}}( \beta_i^{t}h_{i}(\pi''^{s}(t),\pi''^{a}(t)))| $ (Triangle inequality)\\
+		$\le \beta_i^{k}\frac{M_i}{1-\beta_i}$ (By the choice of $M_i$ and $\lim_{T\to\infty}$)\\
+		$\leq e_i(k)$
+		\item $\lim_{k\to\infty} e_i(k)=0$,\\
+		$\lim_{k\to\infty} |v_i(\{\pi\})-v_i(\{\pi|_k\})| = 0$ (by comparison test)\\
+		$\lim_{k\to\infty} v_i(\{\pi|_k\})=v_i(\{\pi\})$.
+	\end{enumerate}
+%	\qed
+\end{proof}
+
+
+Now we have all the intermediate results to prove Theorem \ref{thm:correctness}. By Lemma \ref{lem : conv_vi7} and \ref{lem : conv_ui8}, we have:  $\forall s \in S,\;|v_i^{k}(Z,s)-v_i(Z,s)| < E_i(k)$ and $|u_i^{k}(Z,s) - u_i(Z,s)| < E_i(k)$. This implies:\\
+$v_i(Z \cup \{i\},s) \le v_i^{k}(Z \cup \{i\},s) + E_i(k)$  by Lemma $ \ref{lem : opt_finite_path5}$\\
+$v_i(Z \cup \{i\},s) \ge v_i^{k}(Z \cup \{i\},s) - E_i(k)$  by Lemma $ \ref{lem : opt_finite_strat6}$\\
+$u_i(Z ,s) \le u_i^{k}(Z ,s) + E_i(k)$  by Lemma $ \ref{lem : conv_vi7}$\\
+$u_i(Z ,s) \ge u_i^{k}(Z ,s) - E_i(k)$  by Lemma $ \ref{lem : conv_ui8}$\\
+
+Now, we can prove the three following statements:
+\begin{enumerate}
+	\item Using Lemma \ref{lem : opt_finite_path5} and Lemma \ref{lem : conv_ui8},\\
+	$v_i(Z \cup \{i\},s) - u_i(Z ,s) \le v_i^{k}(Z \cup \{i\},s) + E_i(k) - (u_i^{k}(Z ,s) - E_i(k) )$\\
+	$=v_i^{k}(Z \cup \{i\},s) - u_i^{k}(Z ,s) + 2E_i(k)  $\\
+	$\le \Delta_i(k) + 2E_i(k) $\\
+	if $\epsilon \ge \epsilon_2(i,k)$ then $\Delta_i(k) \le \epsilon - 2E_i(k)$\\
+	So, $\forall s \in I$, \\
+	$v_i(Z \cup \{i\},s) - u_i(Z ,s) \le \epsilon$\\
+	$M$ is $\epsilon-Nash$.
+	\item Similarly, \ref{lem : opt_finite_strat6} and \ref{lem : conv_vi7} can be used to prove\\
+	$v_i(Z \cup \{i\},s) - u_i(Z ,s) \ge v_i^{k}(Z \cup \{i\},s) - E_i(k) - (u_i^{k}(Z ,s) + E_i(k) )$\\
+	$=v_i^{k}(Z \cup \{i\},s) - u_i^{k}(Z ,s) - 2E_i(k)  $\\
+	if $\epsilon \le \epsilon_1(i,k)$ then $\Delta_i(k) \ge \epsilon + 2E_i(k)$\\
+	This implies $\exists Z \in P([n]-\{i\})$ and $s \in I$ s.t.\\
+	$v_i(Z \cup \{i\},s) - u_i(Z ,s) \ge \epsilon$\\
+	$M$ is not $\epsilon-Nash$.
+	\item if $\forall i$, $\epsilon_1(i,k_i) < \epsilon$ and for some $j, \epsilon < \epsilon_2(j,k_j)$, \\
+	it is not possible to decide whether $M$ is $\epsilon-Nash$. But, since $\epsilon_2(j,k_j)-\epsilon_1(i,k_i)= 4E_i(k_i)$ and $4E_i(k_i) < \delta$, we have,\\
+	$\forall i \in [n]$, $\epsilon + \delta > \epsilon_2(i,k_i)$. According to the first statement, we have $(\epsilon + \delta)-Nash$.
+\end{enumerate}
+%\qed
+\end{proof}
+
+
