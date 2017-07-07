@@ -10,94 +10,33 @@
 %\section{Proofs}
 %\label{apdx}
 
-In general, given a set of Byzantine players $Z \subset [n]$, a global state $s$, 
+In general given a set of Byzantine players $Z \subset [n]$, a global state $s$, 
 %\in S_{|g}$ where $g=\langle g^1, \ldots, g^n\rangle$ with $g^i={\sf b}$ if $i\in Z$ and $g^i={\sf a}$ or $g^i={\sf r}$ if $i\notin Z$, 
 the pay-off of $i$ playing the game for $k$ steps should be as follows.
 \[
 \begin{array}{l}
-v_i^{'k}(Z,s)=\\
-\hspace{1.2cm} \left\{
+v_i^{'k}(Z\cup\{i\},s)=\\
+\left\{
 \begin{array}{l}
-{\bf \text{if } k > 0 \wedge i \notin Z}  \\
-max_{\pi'^{a}_{i} \in \Pi_{t=0}^{k-1} A_{i}}
-(min_{\pi'^{a}_{Z} \in \Pi_{t=0}^{k-1} A_{Z}}
-\{E_{\pi'^{a}_{[n]-Z-\{i\}} \in \Pi_{t=0}^{k-1} A_{[n]-Z-\{i\}}}\\ \hfill
-(\Sigma_{t=0}^{k-1} \beta_i^{t}H_{i}(\pi'^{s}(t),\pi'^{a}(t))) |\\ BT(Z\cup\{i\},\pi'^{s}(t),\pi'^{a}(t),\pi'^{s}(t+1)) \wedge \pi'^{s}(0)=s \wedge |\pi'|=k\})\\
-{\bf \text{if } k > 0 \wedge i \in Z} \\
-max_{\pi'^{a}_{i} \in \Pi_{t=0}^{k-1} A_{i}}
-min_{\pi'^{a}_{[Z]-\{i\}} \in \Pi_{t=0}^{k-1} A_{[Z]-\{i\}}}
-\{\{E_{\pi'^{a}_{[n]-Z} \in \Pi_{t=0}^{k-1} A_{[n]-Z}}\\ \hfill(\Sigma_{t=0}^{k-1} \beta_i^{t}H_{i}(\pi'^{s}(t),\pi'^{a}(t))) |\\ BT(Z,\pi'^{s}(t),\pi'^{a}(t),\pi'^{s}(t+1)) \wedge \pi'^{s}(0)=s \wedge |\pi'|=k\}\}\\
-{\bf \text{if } k = 0}  \\0
+max_{\Sigma^{i}_k}
+(min_{\Sigma^{Z}_k}
+\{E_{\Sigma^{L}_k}
+(\Sigma_{t=0}^{k-1} \beta_i^{t}h_{i}(\pi^{s}(t),\pi^{a}(t))) |\\ \pi \in Path(s,Z\cup \{i\},\Sigma^{[n]}_k)\}) \hfill {\bf \text{if } k > 0}\\
+0 \hfill {\bf \text{if } k = 0}
 \end{array}
 \right.
 \end{array}
 \]
-where $\pi'$ is a path of length $k$.
-
-In the case of $k > 0 \wedge i \notin Z$, $\pi'^{s}(t)$ is the state at position $t$ in the path $\pi'$
-and $\pi'^{a}(t)$ is the action at position $t$ in the path $\pi'$.
-Hence, $H_{i}(\pi'^{s}(t),\pi'^{a}(t))$ defines the pay-off of $i$ on the transition at position $t$.
-The pay-offs of length $k$ is the sum of each position, with every pay-off weighted with discount factor $\beta_i^t$, i.e., $\Sigma_{t=0}^{k-1} \beta_i^{t}H_{i}(\pi'^{s}(t),\pi'^{a}(t))$. Note that given a choice, we have a tree, containing a set of paths.
-For each path in the tree, calculation of the pay-off of the path is as above. 
-The expected pay-off of the tree can be calculated using these pay-offs, by considering the probabilities in each path.
-This process is denoted by $E_{\pi'^{a}_{[n]-Z-\{i\}} \in \Pi_{t=0}^{k-1} A_{[n]-Z-\{i\}}}$.
-The possible trees are grouped by the rational players' choices of non-deterministic actions, i.e., for one choice, there are a set of trees due to that there
-may be different choices for Byzantine players. For each set/group of trees,
-we choose the tree that minimised the expected pay-off, denoted by $min_{\pi'^{a}_{Z} \in \Pi_{t=0}^{k-1} A_{Z}}$,
-because we assume that the Byzantine players try to minimise $i$'s pay-offs.
-Now in each group (i.e., for a choice of the rational player), there is only the minimised tree,
-and each group has exactly one choice of non-deterministic actions of $i$.
-We choose the one which gives the maximum expected pay-off, denoted by $max_{\pi'^{a}_{i} \in \Pi_{t=0}^{k-1} A_{i}}$, meaning that the rational player $i$
-always makes the choice that gives the maximised pay-off. 
-In addition, we ensure that each transition in each path is valid ($BT(Z\cup\{i\},\pi'^{s}(t),\pi'^{a}(t),\pi'^{s}(t+1))$),
-the initial state of each path is $s$ and the length of each path is $k$. Hence, 
-in summary, the formula captures the intuitive calculate of $i$'s pay-off in length $k$ starting from $s$ w.r.t. $Z\cup\{i\}$.
-
-If $k > 0 \wedge i \in Z$, since $i\in Z$, the set of altruistic and Byzantine players
-differ from the set of altruistic and Byzantine players in the case of $i\notin Z$, that is,
-in the case of $i\notin Z$, $i$ can be altruistic or rational, whereas in the case of $i\in Z$,
-$i$ can be Byzantine or rational. Hence, the grouping of trees due to the rational players' choices
-is different in these two cases. Therefore, in the case of $i\in Z$, the process of calculating the
-expected pay-off of trees is denoted differently as $E_{\pi'^{a}_{[n]-Z} \in \Pi_{t=0}^{k-1} A_{[n]-Z}}$.
-The second difference is in the $BT$ functions. Since $i\in Z$, we do not need to additionally add $i$ to $Z$ to
-capture the rational behaviour of $i$. 
-If $k=0$, we initialise the pay-off as $0$.
-
-Similarly, we define the correct pay-off for $u_i^{'k}(Z,s)$ as follows:
-%
-%\[
-%\begin{array}{l}
-%v_i^{'k}(Z,s)=\\
-%\hspace{1.2cm} \left\{
-%\begin{array}{l}
-%{\bf \text{if } k > 0 \wedge i \notin Z}  \\
-%max_{\pi'^{a}_{i} \in \Pi_{t=0}^{k-1} A_{i}}
-%(min_{\pi'^{a}_{Z} \in \Pi_{t=0}^{k-1} A_{Z}}
-%\{E_{\pi'^{a}_{[n]-Z-\{i\}} \in \Pi_{t=0}^{k-1} A_{[n]-Z-\{i\}}}\\ \hfill
-%(\Sigma_{t=0}^{k-1} \beta_i^{t}H_{i}(\pi'^{s}(t),\pi'^{a}(t))) |\\ BT(Z\cup\{i\},\pi'^{s}(t),\pi'^{a}(t),\pi'^{s}(t+1)) \wedge \pi'^{s}(0)=s \wedge |\pi'|=k\})\\
-%{\bf \text{if } k > 0 \wedge i \in Z} \\
-%max_{\pi'^{a}_{i} \in \Pi_{t=0}^{k-1} A_{i}}
-%min_{\pi'^{a}_{[Z]-\{i\}} \in \Pi_{t=0}^{k-1} A_{[Z]-\{i\}}}
-%\{\{E_{\pi'^{a}_{[n]-Z} \in \Pi_{t=0}^{k-1} A_{[n]-Z}}\\ \hfill(\Sigma_{t=0}^{k-1} \beta_i^{t}H_{i}(\pi'^{s}(t),\pi'^{a}(t))) |\\ BT(Z,\pi'^{s}(t),\pi'^{a}(t),\pi'^{s}(t+1)) \wedge \pi'^{s}(0)=s \wedge |\pi'|=k\}\}\\
-%{\bf \text{if } k = 0}  \\0
-%\end{array}
-%\right.
-%\end{array}
-%\]
-%
 \[
 \begin{array}{l}
-u_{i}^{'k}(Z,s)=
+u_i^{'k}(Z\cup\{i\},s)=\\
 \left\{
 \begin{array}{l}
-{\bf \text{if } k > 0 \wedge i \notin Z}  \\
-E_{a_i \in A_i} \big(
-min _{a_{Z} \in A_{Z}}\{
-\\E_{a_{[n]-Z-\{i\}} \in A_{a_{[n]-Z-\{i\}}}} (\Sigma_{t=0}^{k-1} \beta_i^{t}H_{i}(\pi'^{s}(t),\pi'^{a}(t))) |\\ BT(Z,\pi'^{s}(t),\pi'^{a}(t),\pi'^{s}(t+1)) \wedge \pi'^{s}(0)=s \wedge |\pi'|=k\})\\
-{\bf \text{if } k > 0 \wedge i \in Z} \\
-min _{a_i \in A_i} \{
-min_{a_{Z-\{i\}} \in A_{Z-\{i\}}}\{
-\\E_{a_{[n]-Z} \in A_{[n]-Z}} (\Sigma_{t=0}^{k-1} \beta_i^{t}H_{i}(\pi'^{s}(t),\pi'^{a}(t))) |\\ BT(Z,\pi'^{s}(t),\pi'^{a}(t),\pi'^{s}(t+1)) \wedge \pi'^{s}(0)=s \wedge |\pi'|=k\})\\
+E_{\Sigma^{i}_k}
+(min_{\Sigma^{Z}_k}
+\{E_{\Sigma^{L}_k}
+(\Sigma_{t=0}^{k-1} \beta_i^{t}h_{i}(\pi^{s}(t),\pi^{a}(t))) |\\ \pi \in Path(s,Z\cup \{i\},\Sigma^{[n]}_k)\})\hfill {\bf \text{if } k > 0} \\
+0 \hfill {\bf \text{if } k = 0} 
 \end{array}
 \right.
 \end{array}
@@ -111,25 +50,7 @@ min_{a_{Z-\{i\}} \in A_{Z-\{i\}}}\{
 %%$v_i^{k}(Z,s)= max_{\sigma \in Strat_{k}(s,Z,i)}\{min_{}  \} $
 %%$v_i^{k}(Z,s)=E_{\pi'^{a} \in \Pi_{t=0}^{k-1} A_{[n]-Z}}(\Sigma_{t=0}^{k-1} \beta_i^{t}h_{i}(\pi'^{s}(t),\pi'^{a}(t)))$
 %
-\[
-\begin{array}{l}
-v_i^{'k}(Z,s)=\\
-\hspace{1.2cm} \left\{
-\begin{array}{l}
-{\bf \text{if } k > 0 \wedge i \in Z} \\
-max_{\pi'^{a}_{i} \in \Pi_{t=0}^{k-1} A_{i}}
-min_{\pi'^{a}_{[Z]-\{i\}} \in \Pi_{t=0}^{k-1} A_{[Z]-\{i\}}}
-\{\{E_{\pi'^{a}_{[n]-Z} \in \Pi_{t=0}^{k-1} A_{[n]-Z}}\\ \hfill(\Sigma_{t=0}^{k-1} \beta_i^{t}h_{i}(\pi'^{s}(t),\pi'^{a}(t))) |\\ BT(Z,\pi'^{s}(t),\pi'^{a}(t),\pi'^{s}(t+1)) \wedge \pi'^{s}(0)=s \wedge |\pi'|=k\}\}\\
-{\bf \text{if } k > 0 \wedge i \notin Z}  \\
-E_{\pi'^{a}_{i} \in \Pi_{t=0}^{k-1} A_{i}}
-(min_{\pi'^{a}_{Z} \in \Pi_{t=0}^{k-1} A_{Z}}
-\{E_{\pi'^{a}_{[n]-Z-\{i\}} \in \Pi_{t=0}^{k-1} A_{[n]-Z-\{i\}}}\\ \hfill
-(\Sigma_{t=0}^{k-1} \beta_i^{t}h_{i}(\pi'^{s}(t),\pi'^{a}(t))) |\\ BT(Z,\pi'^{s}(t),\pi'^{a}(t),\pi'^{s}(t+1)) \wedge \pi'^{s}(0)=s \wedge |\pi'|=k\})\\
-{\bf \text{if } k = 0}  \\0
-\end{array}
-\right.
-\end{array}
-\]
+
 
 %We can use induction to prove that the dynamic programming definition of $v_i^{k}(Z,s)$ also computes the same function. Induction is done on the path length $t$ \cite{MMS08}.
 For recall,
@@ -139,11 +60,12 @@ For recall,
 \end{theorem}
 
 \begin{proof}
-	For $k=0$, the result is trivial because value of empty path is defined to be $0$. So the maximin path value is 0.
-	Substitute the original function value $v_i^{'k}(Z,s)$ to compute $v_i^{k+1}(Z,s)$ in the dynamic programming definition. 
-	Let $i \in Z$, 
-	%let the new path set be $\{\pi'\}$ and the 
-	any path of length $k$  th iteration be $\pi$ and let $\{\pi\}$ be any infinite length probabilistic path starting from state $s$.
+	
+	We are going to do induction in path length k. For $k = 0$, the result
+	is trivial because value of empty path is dened to be 0. So the maximin path
+	value is $0$.Let $\pi$ be an optimal path of length $k$ and $\Sigma^{i}_k$ be an optimal strategy for player $i$ of length k. Let $a_i$ be any action of player $i$, $a$ is any global action.	We denote a path of the form $sa\pi$ by $\pi^{'}$
+	and a strategy of form $a_i\Sigma^{i}_k$ by $\Sigma^{'i}_{k+1}$
+	
 	%	$k$ corresponds to a length of $k+1$. $(k \geq 0)$
 	%	$E_{A_{[n]-Z}(s)}(h(s,<a_i,a_{-i}>)+\beta_iv_i^{k}(Z,s'))=$\\
 	%	$E_{A_{[n]-Z}(s)}(h(s,<a_i,a_{-i}>)+\beta_iE_{\pi^{a} \in \Pi_{t=0}^k A_{[n]-Z}}(\Sigma_{t=0}^{k} \beta_i^{t}h_{i}(\pi^{s}(t),\pi^{a}(t))))$\\
@@ -166,26 +88,47 @@ For recall,
 %	\end{split}
 %	\end{equation}
 
+%= maxai2AifminaZ2AZ fEaL2AL
+%􀀀
+%(Hi(s; a) + ivi
+%k(Z [ fig; s0))
+%ja = hai; aZ; aLi ; T(s; a; s0) = true in Mjgz0
+%
+%gg
+
+
 	\begin{equation}
 	\begin{split}
-	&E_{a_{[n]-Z} \in A_{[n]-Z}}(h(s,\langle a_i,a_{-i} \rangle) +\beta_iv_i^{k}(Z,s')|BT(Z,s,\langle a_i,a_{-i} \rangle,s')) \\
-& = E_{a_{[n]-Z} \in A_{[n]-Z}}(h(s,\langle a_i,a_{-i} \rangle)+\beta_iE_{\pi^{a} \in \Pi_{t=0}^{k-1} A_{[n]-Z}}(\Sigma_{t=0}^{k-1} \beta_i^{t}h_{i}(\pi^{s}(t),\pi^{a}(t))|\\ &\hspace{2cm} BT(Z,s,\langle a_i,a_{-i} \rangle,s')))\\
-& =E_{a_{[n]-Z} \in A_{[n]-Z}}(h(s,\langle a_i,a_{-i} \rangle)) +
-	E_{A_{[n]-Z}}(E_{\pi'^{a} \in \Pi_{t=1}^{k}A_{[n]-Z}}(\\ &\hspace{2cm} \Sigma_{t=1}^{k} \beta_i^{t}h_{i}(\pi'^{s}(t),\pi'^{a}(t))|BT(Z,s,\langle a_i,a_{-i} \rangle,s')))\\
-& =E_{\pi'^{a} \in \Pi_{t=0}^{k}A_{[n]-Z}}(h(s,\langle a_i,a_{-i} \rangle)) +
-	E_{\pi'^{a} \in \Pi_{t=0}^{k} A_{[n]-Z}}(\Sigma_{t=1}^{k} \beta_i^{t}h_{i}(\pi'^{s}(t),\pi'^{a}(t))|\\ &\hspace{2cm} BT(Z,s,\langle a_i,a_{-i} \rangle,s'))\\
-& =E_{\pi'^{a} \in \Pi_{t=0}^{k} A_{[n]-Z}}(\Sigma_{t=0}^{k} \beta_i^{t}h_{i}(\pi'^{s}(t),\pi'^{a}(t))|BT(Z,s,\langle a_i,a_{-i} \rangle,s'))
+	=max_{a_i \in A_i} \{min_{a_{Z} \in A_{Z}}\{
+	E_{a_L \in A_{L}}\big((H_i(s,a) + \beta_i{v_i}^{k}(Z,s'))\\
+	 |a= \langle a_i,a_Z,a_L\rangle \  T(s,a,s')=\mathit{true}\ \text{in}\ \mathcal{M}_{|gz'} \big)\} \} \notag\\
+	 =max_{a_i \in A_i} \{min_{a_{Z} \in A_{Z}}\{
+	 	E_{a_L \in A_{L}}\big((H_i(s,a) + \beta_imax_{\Sigma^{i}_k}
+	 	(min_{\Sigma^{Z}_k}
+	 	\{E_{\Sigma^{L}_k}
+	 	(\Sigma_{t=0}^{k-1} \beta_i^{t}h_{i}(\pi^{s}(t),\pi^{a}(t))) |\\ \pi \in Path(s',Z\cup \{i\},\Sigma^{[n]}_k)\})
+	 	|a= \langle a_i,a_Z,a_L\rangle \  T(s,a,s')=\mathit{true}\ \text{in}\ \mathcal{M}_{|gz'} \big)\} \} \text{(Inductive hypothesis)} \notag\\
+	 	=max_{a_i \in A_i} \{min_{a_{Z} \in A_{Z}}\{
+	 	E_{a_L \in A_{L}}\big(max_{\Sigma^{i}_k}
+	 	(min_{\Sigma^{Z}_k}
+	 	\{E_{\Sigma^{L}_k}
+	 	(\Sigma_{t=0}^{k} \beta_i^{t}h_{i}(\pi^{'s}(t),\pi^{'a}(t))) |\\ \pi \in Path(s',Z\cup \{i\},\Sigma^{[n]}_k)\})
+	 	|a= \langle a_i,a_Z,a_L\rangle \  T(s,a,s')=\mathit{true}\ \text{in}\ \mathcal{M}_{|gz'} \big) \} \} \notag\\	 	
+=
+max_{a_i\Sigma^{i}_k}
+(min_{a_Z\Sigma^{Z}_k}
+\{E_{a_L\Sigma^{L}_k}
+(\Sigma_{t=0}^{k} \beta_i^{t}h_{i}(\pi^{'s}(t),\pi^{'a}(t))) |\\ \pi^{'} \in Path(s,Z\cup \{i\},\Sigma^{[n]}_{k+1})\})\notag\\
+=
+max_{a_i\Sigma^{''i}_k}
+(min_{a_Z\Sigma^{''Z}_k}
+\{E_{a_L\Sigma^{''L}_k}
+(\Sigma_{t=0}^{k} \beta_i^{t}h_{i}(\pi^{''s}(t),\pi^{''a}(t))) |\\ \pi^{''} \in Path(s,Z\cup \{i\},\Sigma^{''[n]}_{k+1})\})\notag\\
+=v_i^{'k+1}(Z,s)
 	\end{split}
 	\end{equation}	
 	
-The maximin value would be:
-	\begin{multline}
-	v_i'k(Z,s) = max_{\pi'^{a}_{i} \in \Pi_{t=0}^{k} A_{i}}
-	min_{\pi'^{a}_{[Z]-\{i\}} \in \Pi_{t=0}^{k} A_{[Z]-\{i\}}}\\
-	E_{\pi'^{a} \in \Pi_{t=0}^{k} A_{[n]-Z}}(\Sigma_{t=0}^{k} \beta_i^{t}h_{i}(\pi'^{s}(t),\pi'^{a}(t))|BT(Z,s,\langle a_i,a_{-i} \rangle,s'))
-	\end{multline}
-	
-	When $\{\pi\}$ is the path set corresponding to optimal expected value for length $k$,   $\{\pi'\}$ would be the path set $s\langle a_i,a_{-i}\rangle \pi \in \Pi_{t=0}^{k} A_{[n]-Z}$. Suppose we choose a different path set from $s'$ other than $v_i^k(s',Z)$ if does not correspond to the maximum expected value over player $i$ among the guaranteed values, we can miss a max value path set in general. The proof is similar for $u_i^k(Z,s)$.  %\qed
+
 \end{proof}
 
 \subsection{Correctness of Arbitrary Precision Nash Equilibria Verification\cite{MMS08}}
