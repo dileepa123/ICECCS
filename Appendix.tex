@@ -127,11 +127,11 @@ max_{a_i\Sigma^{''i}_k}
 =v_i^{'k+1}(Z,s)
 	\end{split}
 	\end{equation}	
-	
+	proof is similar for $u_i^{'k+1}$.
 
 \end{proof}
 
-\subsection{Correctness of Arbitrary Precision Nash Equilibria Verification\cite{MMS08}}
+\subsection{Correctness of Arbitrary Precision Nash Equilibria Verification}
  
 \paragraph{Proposition \ref{prop:limkvu}} Though this result is not directly used in the proof of Theorem \ref{thm:correctness}, we take advantage of this subsection to explain how one can prove it. Indeed, Proposition \ref{prop:limkvu} relies on the same Lemmas than the ones used for the proof of Theorem \ref{thm:correctness}.
 For recall,
@@ -165,12 +165,13 @@ For recall,
 As written in the paper, apart Lemma \ref{lem:limvkpi}, Lemmas \ref{lem:vdiff} to \ref{lem:ukudiff}, as well as the proposition, are very similar from the results established in \cite{MariPhD}. For that reason, we do not reproduce their proof here and we refer to the text and \cite{MariPhD} for more details. Proof of Lemma \ref{lem:limvkpi} is given below.
 
 We now present the proof of Theorem \ref{thm:correctness}. For recall,
-\begin{theorem}%\label{thm:correctness}
-	Let $\mathcal{G}=(S, s_0, A, T, P, H, \beta)$ be an $n$ player game, $ \epsilon > 0$ and $\delta > 0$ and $Z \subset [n]$ be the set of Byzantine players, for each player $i \in [n]$ let 
+\begin{theorem}
+	\label{thm:correctness}
+	Let $\mathcal{G}_{|gz}=(S, I, A, T, P, H)$ be a FSM representing a configuration of a system with $n$ players, $ \epsilon > 0$, $\delta > 0$ and $Z \subset [n]$ be the set of Byzantine players, for each player $i \in [n]$ with discount factor $\beta_i$, let 
 	\begin{enumerate}
-		\item $M_i$ = $max \{|h_i(s,a)| | s \in S$ and $a \in A\}$
-		\item $E_i(k) = 5\beta_i^{k} \frac{M_i}{1-\beta_i}$
-		\item $\Delta_i(k)=max\{v_i^{k}(Z \cup \{i\},{\sf f}(s))- u_i^{k}(Z,s)|s\in O \}$
+		\item $M_i$ = $max \{|H_i(s,a)| | s \in S$ and $a \in A\}$
+		\item $E_i(k) = 5\beta_i^{k} \frac{M_i}{1-\beta_i}$ (The bound $E_i(k)$ is the same as in~\cite{FDJD16}. For details, see~\cite{techreport}.)
+		\item $\Delta_i(k)=max\{v_i^{k}(Z \cup \{i\},s)- u_i^{k}(Z,s)|s\in I \}$
 		\item $\epsilon_1(i,k) = \Delta_i(k) - 2E_i(k)$
 		\item $\epsilon_2(i,k) = \Delta_i(k) + 2E_i(k)$,
 	\end{enumerate}
@@ -196,13 +197,13 @@ In order to prove the convergence of the value function, we want to bound the va
 	%	Let $\pi''^{a}=<b,\pi'^{a}>$ , $b \in A$\newline
 	\begin{enumerate}
 		\item 	$|v_i(\{\pi|_T\})-v_i(\{\pi|_k\})| =$\\
-		$~~~~~| E_{\pi^{'a} \in \Pi_{t=0}^{k-1} A_{[n]-Z}}(\Sigma_{t=0}^{k-1} \beta_i^{t}h_{i}(\pi^{s}(t),\pi^{a}(t))) -$\\
-		$~~~~~~ E_{\pi''^{a} \in \Pi_{t=0}^{k-1} A_{[n]-Z} \Pi_{t=k}^{T} A_{[n]-Z}}(\Sigma_{t=0}^{T} \beta_i^{t}h_{i}(\pi''^{s}(t),\pi''^{a}(t)))|$\\
-		$=| E_{\pi''^{a} \in \Pi_{t=0}^{k-1} A_{[n]-Z} \Pi_{t=k}^{T} A_{[n]-Z}}(\Sigma_{t=0}^{k-1} \beta_i^{t}h_{i}(\pi^{s}(t),\pi^{a}(t)))-$\\
-		$~~~~~~ E_{\pi''^{a} \in \Pi_{t=0}^{k-1} A_{[n]-Z} \Pi_{t=k}^{T} A_{[n]-Z}}(\Sigma_{t=0}^{T} \beta_i^{t}h_{i}(\pi''^{s}(t),\pi''^{a}(t)))|$\\
-		$ =|E_{\pi''^{a} \in \Pi_{t=0}^{k-1} A_{[n]-Z} \Pi_{t=k}^{T} A_{[n]-Z}}(\Sigma_{t=k}^{T} \beta_i^{t}h_{i}(\pi''^{s}(t),\pi''^{a}(t)))|$\\
-		$\leq |\Sigma_{t=k}^{T} E_{\pi''^{a} \in \Pi_{t=0}^{k-1} A_{[n]-Z} \Pi_{t=k}^{T} A_{[n]-Z}}( \beta_i^{t}h_{i}(\pi''^{s}(t),\pi''^{a}(t)))| $ (Linearity of Expectation)\\
-		$\leq \Sigma_{t=k}^{T}| E_{\pi''^{a} \in \Pi_{t=0}^{k-1} A_{[n]-Z} \Pi_{t=k}^{T} A_{[n]-Z}}( \beta_i^{t}h_{i}(\pi''^{s}(t),\pi''^{a}(t)))| $ (Triangle inequality)\\
+		$~~~~~| E_{\pi^{'a} \in \Pi_{t=0}^{k-1} A_{L}}(\Sigma_{t=0}^{k-1} \beta_i^{t}h_{i}(\pi^{s}(t),\pi^{a}(t))) -$\\
+		$~~~~~~ E_{\pi''^{a} \in \Pi_{t=0}^{k-1} A_{L}} \Pi_{t=k}^{T} A_{L}(\Sigma_{t=0}^{T} \beta_i^{t}h_{i}(\pi''^{s}(t),\pi''^{a}(t)))|$\\
+		$=| E_{\pi''^{a} \in \Pi_{t=0}^{k-1} A_{L}} \Pi_{t=k}^{T} A_{L}(\Sigma_{t=0}^{k-1} \beta_i^{t}h_{i}(\pi^{s}(t),\pi^{a}(t)))-$\\
+		$~~~~~~ E_{\pi''^{a} \in \Pi_{t=0}^{k-1} A_{L}} \Pi_{t=k}^{T} A_{L}(\Sigma_{t=0}^{T} \beta_i^{t}h_{i}(\pi''^{s}(t),\pi''^{a}(t)))|$\\
+		$ =|E_{\pi''^{a} \in \Pi_{t=0}^{k-1} A_{L} \Pi_{t=k}^{T} A_{L}}(\Sigma_{t=k}^{T} \beta_i^{t}h_{i}(\pi''^{s}(t),\pi''^{a}(t)))|$\\
+		$\leq |\Sigma_{t=k}^{T} E_{\pi''^{a} \in \Pi_{t=0}^{k-1} A_{L} \Pi_{t=k}^{T} A_{L}}( \beta_i^{t}h_{i}(\pi''^{s}(t),\pi''^{a}(t)))| $ (Linearity of Expectation)\\
+		$\leq \Sigma_{t=k}^{T}| E_{\pi''^{a} \in \Pi_{t=0}^{k-1} A_{L} \Pi_{t=k}^{T} A_{L}}( \beta_i^{t}h_{i}(\pi''^{s}(t),\pi''^{a}(t)))| $ (Triangle inequality)\\
 		$\le \beta_i^{k}\frac{M_i}{1-\beta_i}$ (By the choice of $M_i$ and $\lim_{T\to\infty}$)\\
 		$\leq e_i(k)$
 		\item $\lim_{k\to\infty} e_i(k)=0$,\\
@@ -214,14 +215,14 @@ In order to prove the convergence of the value function, we want to bound the va
 
 
 Now we have all the intermediate results to prove Theorem \ref{thm:correctness}. By Lemma \ref{lem : conv_vi7} and \ref{lem : conv_ui8}, we have:  $\forall s \in S,\;|v_i^{k}(Z,s)-v_i(Z,s)| < E_i(k)$ and $|u_i^{k}(Z,s) - u_i(Z,s)| < E_i(k)$. This implies:\\
-$v_i(Z \cup \{i\},s) \le v_i^{k}(Z \cup \{i\},s) + E_i(k)$  by Lemma $ \ref{lem : opt_finite_path5}$\\
-$v_i(Z \cup \{i\},s) \ge v_i^{k}(Z \cup \{i\},s) - E_i(k)$  by Lemma $ \ref{lem : opt_finite_strat6}$\\
-$u_i(Z ,s) \le u_i^{k}(Z ,s) + E_i(k)$  by Lemma $ \ref{lem : conv_vi7}$\\
-$u_i(Z ,s) \ge u_i^{k}(Z ,s) - E_i(k)$  by Lemma $ \ref{lem : conv_ui8}$\\
+$v_i(Z \cup \{i\},s) \le v_i^{k}(Z \cup \{i\},s) + E_i(k)$  by Lemma $ \ref{lem:vkvdiff}$\\
+$v_i(Z \cup \{i\},s) \ge v_i^{k}(Z \cup \{i\},s) - E_i(k)$  by Lemma $ \ref{lem:vkvdiff}$\\
+$u_i(Z ,s) \le u_i^{k}(Z ,s) + E_i(k)$  by Lemma $ \ref{lem:ukudiff}$\\
+$u_i(Z ,s) \ge u_i^{k}(Z ,s) - E_i(k)$  by Lemma $ \ref{lem:ukudiff}$\\
 
 Now, we can prove the three following statements:
 \begin{enumerate}
-	\item Using Lemma \ref{lem : opt_finite_path5} and Lemma \ref{lem : conv_ui8},\\
+	\item Using Lemma \ref{lem:vkvdiff} and Lemma \ref{lem:ukudiff},\\
 	$v_i(Z \cup \{i\},s) - u_i(Z ,s) \le v_i^{k}(Z \cup \{i\},s) + E_i(k) - (u_i^{k}(Z ,s) - E_i(k) )$\\
 	$=v_i^{k}(Z \cup \{i\},s) - u_i^{k}(Z ,s) + 2E_i(k)  $\\
 	$\le \Delta_i(k) + 2E_i(k) $\\
@@ -229,7 +230,7 @@ Now, we can prove the three following statements:
 	So, $\forall s \in I$, \\
 	$v_i(Z \cup \{i\},s) - u_i(Z ,s) \le \epsilon$\\
 	$M$ is $\epsilon-Nash$.
-	\item Similarly, \ref{lem : opt_finite_strat6} and \ref{lem : conv_vi7} can be used to prove\\
+	\item Similarly, lemma \ref{lem:vkvdiff} and \ref{lem:ukudiff} can be used to prove\\
 	$v_i(Z \cup \{i\},s) - u_i(Z ,s) \ge v_i^{k}(Z \cup \{i\},s) - E_i(k) - (u_i^{k}(Z ,s) + E_i(k) )$\\
 	$=v_i^{k}(Z \cup \{i\},s) - u_i^{k}(Z ,s) - 2E_i(k)  $\\
 	if $\epsilon \le \epsilon_1(i,k)$ then $\Delta_i(k) \ge \epsilon + 2E_i(k)$\\
@@ -243,4 +244,29 @@ Now, we can prove the three following statements:
 %\qed
 \end{proof}
 
+\subsection{Correctness of Stability Dynamic Programming Definition }
 
+\begin{theorem}
+	\label{thm:dpalgo2}
+	$v_i^{'k}(Z,s,\Sigma^{i,j}_k)=v_i^{k}(Z,s,\Sigma^{i,j}_k)$ and
+	$v_j^{'k}(Z,s,\Sigma^{i,j}_k)=v_j^{k}(Z,s,\Sigma^{i,j}_k)$
+\end{theorem}
+
+\begin{proof}
+	To prove this we only have to remove the maximization part in the two expressions and replace $a_i$ with $a_{i,j}$ and replace $\Sigma^i_k$ with $\Sigma^{i,j}_k$ 
+\end{proof}
+
+
+\begin{theorem}
+	\label{thm:dpalgo2}
+	$V_{i,\alpha}^{'k}(Z,s,j)=V_{i,\alpha}^{k}(Z,s,j)$ and
+	$V_{j,\alpha}^{'k}(Z,s,i)=V_{j,\alpha}^{k}(Z,s,i)$
+\end{theorem}
+
+\begin{proof}
+	By using the equations in theorem \ref{thm:dpalgo2} we can derive,\\
+	$\alpha v_i^{'k}(Z,s,\Sigma^{i,j}_k) + (1-\alpha)v_j^{'k}(Z,s,\Sigma^{i,j}_k)=$
+	$\alpha v_i^{k}(Z,s,\Sigma^{i,j}_k) + (1-\alpha)v_j^{k}(Z,s,\Sigma^{i,j}_k) $\\
+	$\max_{\Sigma^{i,j}_k} \alpha v_i^{'k}(Z,s,\Sigma^{i,j}_k) + (1-\alpha)v_j^{'k}(Z,s,\Sigma^{i,j}_k)=$
+	$\max_{\Sigma^{i,j}_k}\alpha v_i^{k}(Z,s,\Sigma^{i,j}_k) + (1-\alpha)v_j^{k}(Z,s,\Sigma^{i,j}_k) $
+\end{proof}
