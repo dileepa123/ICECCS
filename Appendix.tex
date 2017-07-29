@@ -162,7 +162,7 @@ For recall,
 	$\forall s\in S$ and $\forall k \in \mathbb{N}$, we have: \\
 	$|u_i^{k}(Z,s) - u_i(Z,s)| < E_i(k)$.
 \end{lemma}
-As written in the paper, apart Lemma \ref{lem:limvkpi}, Lemmas \ref{lem:vdiff} to \ref{lem:ukudiff}, as well as the proposition, are very similar from the results established in \cite{MariPhD}. For that reason, we do not reproduce their proof here and we refer to the text and \cite{MariPhD} for more details. Proof of Lemma \ref{lem:limvkpi} is given below.
+As written in the paper, apart Lemma \ref{lem:limvkpi}, Lemmas \ref{lem:vdiff} to \ref{lem:ukudiff}, as well as the proposition, are very similar from the results established in \cite{MariPhD}. For that reason, we do not reproduce their proof here and we refer to the text and \cite{MariPhD} for more details. Proof of Lemma \ref{lem:limvkpi} is given below. 
 
 We now present the proof of Theorem \ref{thm:correctness}. For recall,
 \begin{theorem}
@@ -269,4 +269,13 @@ Now, we can prove the three following statements:
 	$\alpha v_i^{k}(Z,s,\Sigma^{i,j}_k) + (1-\alpha)v_j^{k}(Z,s,\Sigma^{i,j}_k) $\\
 	$\max_{\Sigma^{i,j}_k} \alpha v_i^{'k}(Z,s,\Sigma^{i,j}_k) + (1-\alpha)v_j^{'k}(Z,s,\Sigma^{i,j}_k)=$
 	$\max_{\Sigma^{i,j}_k}\alpha v_i^{k}(Z,s,\Sigma^{i,j}_k) + (1-\alpha)v_j^{k}(Z,s,\Sigma^{i,j}_k) $
+\end{proof}
+
+\begin{lemma}
+	\label{lem:paretoerror}
+	$|V_{i,\alpha}^{k}(Z,s,j)-V_{i,\alpha}(Z,s,j)|<E_i(k)$
+\end{lemma}
+
+\begin{proof}
+	Idea of the proof the similar to the proof of the lemma \ref{lem:vkvdiff} in Mari's thesis \cite{MariPhD}. The contradiction is made on the pareto optimality instead of the optimality of the strategy $\Sigma^{i,j}$.
 \end{proof}
