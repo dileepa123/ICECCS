@@ -256,7 +256,6 @@ Now, we can prove the three following statements:
 	To prove this we only have to remove the maximization part in the two expressions and replace $a_i$ with $a_{i,j}$ and replace $\Sigma^i_k$ with $\Sigma^{i,j}_k$ 
 \end{proof}
 
-
 \begin{theorem}
 	\label{thm:dpalgo2}
 	$V_{i,\alpha}^{'k}(Z,s,j)=V_{i,\alpha}^{k}(Z,s,j)$ and
@@ -271,11 +270,41 @@ Now, we can prove the three following statements:
 	$\max_{\Sigma^{i,j}_k}\alpha v_i^{k}(Z,s,\Sigma^{i,j}_k) + (1-\alpha)v_j^{k}(Z,s,\Sigma^{i,j}_k) $
 \end{proof}
 
-\begin{lemma}
-	\label{lem:paretoerror}
-	$|V_{i,\alpha}^{k}(Z,s,j)-V_{i,\alpha}(Z,s,j)|<E_i(k)$
-\end{lemma}
 
+\begin{proposition}\label{prop:limkvu}
+	\begin{enumerate}
+		\item $\lim_{k\to\infty} V_{i,\alpha}^{k}(Z\cup\{i,j\},s,j)=V_{i,\alpha}(Z\cup\{i,j\},s,j)$
+		\item $\lim_{k\to\infty} u_i^{k}(Z,s)=u_i(Z,s)$
+	\end{enumerate}
+\end{proposition}
+\begin{lemma}\label{lem:stlimvkpi}
+	\begin{enumerate}
+		\item $\forall k\in \mathbb{N}, |V_{i,\alpha}(\{\pi\})-V_{i,\alpha}(\{\pi|_k\})|$ $\le$ $e_i(k)$.	
+		\item $\lim_{k\to\infty}  V_{i,\alpha}(\{\pi|_k\})=V_{i,\alpha}(\{\pi\})$.
+	\end{enumerate}
+\end{lemma}
+\begin{lemma}\label{lem:stvdiff}
+	Let $\{ \pi \}$ be a probabilistic path set s.t. $V_{i,\alpha}(\{\pi\})$ is minimum in ${\sf Path}(s,Z,i,\Sigma^{i,j})$, let $\{\{\bar\pi_k \} \}_{k \in \mathbb{N}}$ be a sequence of finite path, s.t. $\forall k$, $V_{i,\alpha}(\{\bar\pi_k   \})$ is minimum in ${\sf Path}_k(s,Z,i,\Sigma^{i,j})$, then $V_{i,\alpha}(\{\pi|_k\})-V_{i,\alpha}(\{\bar\pi_k\}) \le 2e_i(k)$.
+\end{lemma}
+\begin{lemma}\label{lem:stlimvkz}
+	$\forall s\in S$ and strategy $\sigma$ we have:\\
+	$\lim_{k\to\infty} V_{i,\alpha}^{k}(Z\cup\{i,j\},s,\Sigma^{i,j}_k) = V_{i,\alpha}(Z\cup\{i,j\},s,\Sigma^{i,j}) $.
+\end{lemma}
+\begin{lemma}\label{lem:stvkvdiff}
+	$\forall  s\in S$ and $\forall k \in \mathbb{N}$, we have:\\
+	$|V_{i,\alpha}^{k}(Z\cup\{i,j\},s,j)-V_{i,\alpha}(Z\cup\{i,j\},s,j)| < E_i(k)$.
+\end{lemma}
 \begin{proof}
 	Idea of the proof the similar to the proof of the lemma \ref{lem:vkvdiff} in Mari's thesis \cite{MariPhD}. The contradiction is made on the pareto optimality instead of the optimality of the strategy $\Sigma^{i,j}$.
 \end{proof}
+
+\begin{lemma}\label{lem:stukudiff}
+	$\forall s\in S$ and $\forall k \in \mathbb{N}$, we have: \\
+	$|u_i^{k}(Z,s) - u_i(Z,s)| < E_i(k)$.
+\end{lemma}
+
+%\begin{lemma}
+%	\label{lem:paretoerror}
+%	$|V_{i,\alpha}^{k}(Z\cup\{i,j\},s,j)-V_{i,\alpha}(Z\cup\{i,j\},s,j)|<E_i(k)$
+%\end{lemma}
+
